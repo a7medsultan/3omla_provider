@@ -17,6 +17,11 @@ export function setLang(lang: Lang): void {
   if (translations[lang]) {
     currentLang = lang;
     localStorage.setItem("lang", lang);
+    if(currentLang === "ar") {
+      document.documentElement.setAttribute("dir", "rtl");
+    } else {
+      document.documentElement.setAttribute("dir", "ltr");
+    }
   }
 }
 

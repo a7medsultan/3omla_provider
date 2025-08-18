@@ -189,7 +189,9 @@ export default function CurrencyExchangeApp() {
                   >
                     <span
                       className={`${
-                        isActive ? "translate-x-6" : "translate-x-1"
+                        isActive
+                          ? "translate-x-6 rtl:-translate-x-6"
+                          : "translate-x-1"
                       } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                     />
                   </Switch>
@@ -211,9 +213,14 @@ export default function CurrencyExchangeApp() {
                 } relative inline-flex h-6 w-11 items-center rounded-full`}
               >
                 <span
-                  className={`${
-                    language === "en" ? "translate-x-6" : "translate-x-1"
-                  } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                  className={`
+            inline-block h-4 w-4 transform rounded-full bg-white transition
+            ${
+              language === "en"
+                ? "translate-x-6 rtl:-translate-x-6"
+                : "translate-x-1"
+            }
+          `}
                 />
               </Switch>
             </div>
@@ -229,7 +236,7 @@ export default function CurrencyExchangeApp() {
               >
                 <span
                   className={`${
-                    darkMode ? "translate-x-6" : "translate-x-1"
+                    darkMode ? "translate-x-6 rtl:-translate-x-6" : "translate-x-1"
                   } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                 />
               </Switch>
@@ -246,7 +253,7 @@ export default function CurrencyExchangeApp() {
               >
                 <span
                   className={`${
-                    notifications ? "translate-x-6" : "translate-x-1"
+                    notifications ? "translate-x-6 rtl:-translate-x-6" : "translate-x-1"
                   } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                 />
               </Switch>
