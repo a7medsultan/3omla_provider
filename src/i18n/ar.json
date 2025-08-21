@@ -58,5 +58,8 @@
   "please_set_active_currencies": "يرجى تعيين العملات النشطة في إعدادات الإدارة",
   "no_currencies_available": "لا توجد عملات متاحة",
   "decimal_places": "الخانات العشرية",
-  "today_exchange_rates": "أسعار الصرف اليوم"
+  "today_exchange_rates": "أسعار الصرف اليوم",
+  "latest_requests": "أحدث الطلبات",
+  "biggest_requests": "أضخم الطلبات",
+  "reports":"تقارير"
 }

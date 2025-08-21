@@ -1,4 +1,4 @@
-import { Home, Globe, Repeat, User } from "lucide-react";
+import { Home, Globe, Repeat, User, ArrowRightLeft, Coins, BarChart2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { t } from '../i18n';
 
@@ -15,7 +15,7 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
         }`}
       >
         <Link to="/">
-          <Home size={20} />
+          <ArrowRightLeft size={20} />
         </Link>
         <Link to="/">
           <span className="text-xs mt-1">{t("home")}</span>
@@ -27,7 +27,7 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
         }`}
       >
         <Link to="/adminCurrencies">
-          <Globe size={20} />
+          <Coins size={20} />
         </Link>
         <Link to="/adminCurrencies">
           <span className="text-xs mt-1">{t("exchange_rates")}</span>
@@ -55,6 +55,18 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
         </Link>
         <Link to="/adminProfile">
           <span className="text-xs mt-1">{t("profile")}</span>
+        </Link>
+      </button>
+      <button
+        className={`p-2 rounded-lg flex flex-col items-center ${
+          pageName === "reports" ? "text-yellow-500" : "text-gray-500"
+        }`}
+      >
+        <Link to="/reports">
+          <BarChart2 size={20} />
+        </Link>
+        <Link to="/reports">
+          <span className="text-xs mt-1">{t("reports")}</span>
         </Link>
       </button>
     </nav>

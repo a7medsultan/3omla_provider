@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-import { ArrowDownUp, Compass, ArrowRightLeft, HandCoins, BarChart2 } from "lucide-react";
+import {
+  ArrowDownUp,
+  Compass,
+  ArrowRightLeft,
+  HandCoins,
+  BarChart2,
+} from "lucide-react";
 import Navigation from "../components/Navigation";
 
-import {t} from "../i18n";
+import { t } from "../i18n";
 import Header from "../components/Header";
-
 
 // --- CurrencyAmount component ---
 interface Currency {
@@ -94,7 +99,9 @@ const CurrencyPair: React.FC<CurrencyPairProps> = ({
   pairRate,
   pairChange,
 }) => {
-  const changeColor = pairChange.startsWith("+") ? "text-green-400" : "text-red-400";
+  const changeColor = pairChange.startsWith("+")
+    ? "text-green-400"
+    : "text-red-400";
   return (
     <div className="bg-gray-700 p-4 rounded-xl shadow-md border border-gray-600">
       <div className="flex items-center justify-between mb-2">
@@ -146,9 +153,7 @@ export default function CurrencyExchangeApp() {
   const [toAmount, setToAmount] = useState<string | undefined>();
   const [activeCurrencies, setActiveCurrencies] = useState<Currency[]>([]);
   const [baseCurrency, setBaseCurrency] = useState<Currency | undefined>();
-
-  
-
+  const [activeTab, setActiveTab] = useState("latest");
 
   useEffect(() => {
     // Fetches currency data from local storage, with fallback to hardcoded data
@@ -165,7 +170,12 @@ export default function CurrencyExchangeApp() {
 
   useEffect(() => {
     // Set default currencies after data is loaded
-    if (activeCurrencies.length > 0 && !fromCurrency && !toCurrency && baseCurrency) {
+    if (
+      activeCurrencies.length > 0 &&
+      !fromCurrency &&
+      !toCurrency &&
+      baseCurrency
+    ) {
       setFromCurrency(activeCurrencies[0]);
       setToCurrency(baseCurrency);
     }
@@ -179,7 +189,10 @@ export default function CurrencyExchangeApp() {
    * @param to The currency to convert to.
    * @returns The calculated exchange rate.
    */
-  const calculateRate = (from: Currency | undefined, to: Currency | undefined) => {
+  const calculateRate = (
+    from: Currency | undefined,
+    to: Currency | undefined
+  ) => {
     if (!from || !to) {
       return 0;
     }
@@ -192,7 +205,7 @@ export default function CurrencyExchangeApp() {
     if (to.base_currency) {
       return from.sell_rate || 0;
     }
-    
+
     // Case 2: Converting FROM the base currency TO an active currency
     // The rate is based on the active currency's buy rate (since we are "buying" it)
     if (from.base_currency) {
@@ -234,8 +247,12 @@ export default function CurrencyExchangeApp() {
   ];
 
   // Dynamically set the available currencies for the selectors
-  const fromCurrencyList = fromCurrency?.base_currency ? [fromCurrency] : activeCurrencies;
-  const toCurrencyList = toCurrency?.base_currency ? [toCurrency] : activeCurrencies;
+  const fromCurrencyList = fromCurrency?.base_currency
+    ? [fromCurrency]
+    : activeCurrencies;
+  const toCurrencyList = toCurrency?.base_currency
+    ? [toCurrency]
+    : activeCurrencies;
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100 font-sans">
@@ -283,7 +300,9 @@ export default function CurrencyExchangeApp() {
 
             <div className="flex justify-between text-sm mb-4">
               <span className="text-gray-400">
-                {t("rate")}: 1 {fromCurrency?.code} = {calculateRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency?.code}
+                {t("rate")}: 1 {fromCurrency?.code} ={" "}
+                {calculateRate(fromCurrency, toCurrency).toFixed(4)}{" "}
+                {toCurrency?.code}
               </span>
               <span className="text-yellow-500">{t("updated_just_now")}</span>
             </div>
@@ -295,23 +314,42 @@ export default function CurrencyExchangeApp() {
         )}
 
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-semibold text-yellow-500">
-              {t("popular_currency_pairs")}
-            </h3>
+          {/* Segmented buttons - full width */}
+          <div className="mb-6 flex rounded-lg overflow-hidden border border-gray-700 w-full max-w-md">
+            <button
+              onClick={() => setActiveTab("latest")}
+              className={`flex-1 py-2 px-4 transition-colors duration-200 ${
+                activeTab === "latest"
+                  ? "bg-yellow-500 text-gray-900"
+                  : "bg-gray-800 text-gray-100 hover:bg-gray-700"
+              }`}
+            >
+              {t("latest_requests")}
+            </button>
+            <button
+              onClick={() => setActiveTab("biggest")}
+              className={`flex-1 py-2 px-4 transition-colors duration-200 ${
+                activeTab === "biggest"
+                  ? "bg-yellow-500 text-gray-900"
+                  : "bg-gray-800 text-gray-100 hover:bg-gray-700"
+              }`}
+            >
+              {t("biggest_requests")}
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            {popularPairs.map((pair, index) => (
-              <CurrencyPair
-                key={index}
-                pairFrom={pair.from}
-                pairTo={pair.to}
-                pairRate={pair.rate}
-                pairChange={pair.change}
-              />
-            ))}
-          </div>
+          {/* Tab content */}
+          {activeTab === "latest" && (
+            <div className="bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-lg space-y-6">
+              soon .. latest requests
+            </div>
+          )}
+
+          {activeTab === "biggest" && (
+            <div className="bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-lg space-y-6">
+              soon .. biggest requests
+            </div>
+          )}
         </div>
       </main>
 

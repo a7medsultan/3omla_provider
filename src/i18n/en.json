@@ -58,5 +58,8 @@
   "please_set_active_currencies": "Please set active currencies in admin settings",
   "no_currencies_available": "No currencies available",
   "decimal_places": "Decimal Places",
-  "today_exchange_rates": "Today's Exchange Rates"
+  "today_exchange_rates": "Today's Exchange Rates",
+  "latest_requests": "Latest Requests",
+  "biggest_requests": "Biggest Requests",
+  "reports":"Reports"
 }
