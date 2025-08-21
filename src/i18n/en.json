@@ -52,5 +52,11 @@
   "dont_have_account": "Don't have an account?",
   "didnt_receive_code": "Didn't receive the code?",
   "english": "English",
-  "arabic": "Arabic"
+  "arabic": "Arabic",
+  "confirm_rates": "Confirm Rates",
+  "updated_just_now": "Updated just now",
+  "please_set_active_currencies": "Please set active currencies in admin settings",
+  "no_currencies_available": "No currencies available",
+  "decimal_places": "Decimal Places",
+  "today_exchange_rates": "Today's Exchange Rates"
 }

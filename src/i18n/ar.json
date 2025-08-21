@@ -52,5 +52,11 @@
   "dont_have_account": "ليس لديك حساب؟",
   "didnt_receive_code": "لم تستلم الرمز؟",
   "english": "الإنجليزية",
-  "arabic": "العربية"
+  "arabic": "العربية",
+  "confirm_rates": "تأكيد الأسعار",
+  "updated_just_now": "تم التحديث الآن",
+  "please_set_active_currencies": "يرجى تعيين العملات النشطة في إعدادات الإدارة",
+  "no_currencies_available": "لا توجد عملات متاحة",
+  "decimal_places": "الخانات العشرية",
+  "today_exchange_rates": "أسعار الصرف اليوم"
 }

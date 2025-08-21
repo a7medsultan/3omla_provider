@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useSwipeable } from "react-swipeable";
 // Components
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
 import CurrencyRow from "../components/CurrencyRow";
 import CustomModal from "../components/CustomModal";
+import Loader from "../components/Loader";
+import { t } from "../i18n";
 
 interface Currency {
   id: number;
@@ -30,53 +32,83 @@ interface Rate {
   sell_rate: number;
 }
 
-const UserCurrencies: React.FC = () => {
+const AdminCurrencies: React.FC = () => {
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [baseCurrency, setBaseCurrency] = useState<Currency | null>(null);
   const [rates, setRates] = useState<Rate[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const today = new Date().toISOString().slice(0, 10);
   const userData = localStorage.getItem("userData");
+  const provider_id = JSON.parse(userData ?? "{}").provider_id;
 
-  useEffect(() => {
-    const provider_id = JSON.parse(userData??"{}").provider_id;
-    const fetchCurrenciesAndRates = async () => {
-      try {
-        const { data: currencyData } = await axios.get<Currency[]>(
-          `http://localhost:8080/api/v1/activeCurrencies/${provider_id}`
-        );
-
-        const baseCurr = currencyData.find((c) => c.base_currency) || null;
-        setBaseCurrency(baseCurr);
-
-        const targets = baseCurr
-          ? currencyData.filter((c) => c.id !== baseCurr.id)
-          : [];
-
-        setCurrencies(targets);
-
-        // inside fetchCurrenciesAndRates
-        if (baseCurr) {
-          setRates(
-            targets.map((currency) => ({
-              id: 0, // placeholder or remove from interface
-              baseCurrency: baseCurr.code,
-              targetCurrency: currency.code,
-              buy_rate: currency.buy_rate ?? 0,
-              sell_rate: currency.sell_rate ?? 0,
-            }))
-          );
+  // -----------------------------
+  // Fetch and Save to localStorage
+  // -----------------------------
+  const fetchCurrenciesAndRates = async (forceRefresh = false) => {
+    try {
+      if (!forceRefresh) {
+        // ✅ Try from localStorage first
+        const cached = localStorage.getItem("currenciesData");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          setBaseCurrency(parsed.baseCurrency);
+          setCurrencies(parsed.currencies);
+          setRates(parsed.rates);
+          return; // ✅ Use cache, skip API
         }
-      } catch (err) {
-        console.error("Error fetching currencies:", err);
       }
-    };
 
+      // ✅ If no cache or forceRefresh → fetch from API
+      const { data: currencyData } = await axios.get<Currency[]>(
+        `http://localhost:8080/api/v1/activeCurrencies/${provider_id}`
+      );
+
+      const baseCurr = currencyData.find((c) => c.base_currency) || null;
+      setBaseCurrency(baseCurr);
+
+      const targets = baseCurr
+        ? currencyData.filter((c) => c.id !== baseCurr.id)
+        : [];
+
+      setCurrencies(targets);
+
+      let newRates: Rate[] = [];
+      if (baseCurr) {
+        newRates = targets.map((currency) => ({
+          id: 0,
+          baseCurrency: baseCurr.code,
+          targetCurrency: currency.code,
+          buy_rate: currency.buy_rate ?? 0,
+          sell_rate: currency.sell_rate ?? 0,
+        }));
+        setRates(newRates);
+      }
+
+      // ✅ Save to localStorage
+      localStorage.setItem(
+        "currenciesData",
+        JSON.stringify({ baseCurrency: baseCurr, currencies: targets, rates: newRates })
+      );
+    } catch (err) {
+      console.error("Error fetching currencies:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // -----------------------------
+  // First load (use cache if exists)
+  // -----------------------------
+  useEffect(() => {
     fetchCurrenciesAndRates();
   }, []);
 
+  // -----------------------------
+  // Handle Rate Change
+  // -----------------------------
   const handleRateChange = (
     updatedRate: Partial<Rate> & { targetCurrency: string }
   ) => {
@@ -89,8 +121,10 @@ const UserCurrencies: React.FC = () => {
     );
   };
 
+  // -----------------------------
+  // Submit rates
+  // -----------------------------
   const submitRates = async () => {
-    // remove rates that have no sell_rate
     const filteredRates = rates.filter((rate) => rate.sell_rate > 0);
 
     if (!filteredRates.length || !baseCurrency) return;
@@ -103,12 +137,11 @@ const UserCurrencies: React.FC = () => {
       rate_date: today,
     }));
 
-    console.log("Data to send:", dataToSend);
-    const provider_id = JSON.parse(userData??"{}").provider_id;
     try {
-      await axios.post(`http://localhost:8080/api/v1/setRates/${provider_id}`, dataToSend);
-      console.log("Rates submitted successfully");
-      // show success message on custom modal
+      await axios.post(
+        `http://localhost:8080/api/v1/setRates/${provider_id}`,
+        dataToSend
+      );
       setModalMessage("Rates submitted successfully");
       setShowModal(true);
     } catch (error) {
@@ -118,11 +151,23 @@ const UserCurrencies: React.FC = () => {
     }
   };
 
+  // -----------------------------
+  // Swipe handlers (refresh)
+  // -----------------------------
+  const handlers = useSwipeable({
+    onSwipedDown: () => {
+      console.log("Swiped down → refreshing currencies");
+      setLoading(true);
+      fetchCurrenciesAndRates(true); // ✅ force refresh from API
+    },
+    delta: 50,
+  });
+
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
-      <Header title="Today's Exchange Rates" />
+      <Header title={t("today_exchange_rates")} />
 
-      <main className="flex-1 overflow-auto p-4">
+      <main {...handlers} className="flex-1 overflow-auto p-4">
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold text-yellow-500"></h3>
@@ -153,7 +198,7 @@ const UserCurrencies: React.FC = () => {
             onClick={submitRates}
             className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-lg"
           >
-            Confirm Rates
+            {t("confirm_rates")}
           </button>
         </div>
       </main>
@@ -165,8 +210,10 @@ const UserCurrencies: React.FC = () => {
           onClose={() => setShowModal(false)}
         />
       )}
+
+      {loading ? <Loader /> : null}
     </div>
   );
 };
 
-export default UserCurrencies;
+export default AdminCurrencies;
