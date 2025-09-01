@@ -7,8 +7,8 @@ import Navigation from "../components/Navigation";
 import CurrencyRow from "../components/CurrencyRow";
 import CustomModal from "../components/CustomModal";
 import Loader from "../components/Loader";
-import { t } from "../i18n";
-
+import { t, setLang } from "../i18n";
+type Lang = "ar" | "en";
 interface Currency {
   id: number;
   code: string;
@@ -43,7 +43,19 @@ const AdminCurrencies: React.FC = () => {
   const today = new Date().toISOString().slice(0, 10);
   const userData = localStorage.getItem("userData");
   const provider_id = JSON.parse(userData ?? "{}").provider_id;
+  const [language, setLanguage] = useState<Lang>();
 
+  // set the language based on the current language
+  useEffect(() => {
+    if (language) {
+      setLang(language);
+    } else {
+      // default is ar
+      let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
+      setLanguage(currentLang);
+      setLang(currentLang);
+    }
+  });
   // -----------------------------
   // Fetch and Save to localStorage
   // -----------------------------
@@ -90,7 +102,11 @@ const AdminCurrencies: React.FC = () => {
       // ✅ Save to localStorage
       localStorage.setItem(
         "currenciesData",
-        JSON.stringify({ baseCurrency: baseCurr, currencies: targets, rates: newRates })
+        JSON.stringify({
+          baseCurrency: baseCurr,
+          currencies: targets,
+          rates: newRates,
+        })
       );
     } catch (err) {
       console.error("Error fetching currencies:", err);

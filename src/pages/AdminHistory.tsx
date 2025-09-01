@@ -2,23 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Repeat } from "lucide-react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
-import { t } from '../i18n';
+import { t, setLang } from "../i18n";
+type Lang = "ar" | "en";
 export default function CurrencyExchangeApp() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [language, setLanguage] = useState<Lang>();
 
+  // set the language based on the current language
+  useEffect(() => {
+    if (language) {
+      setLang(language);
+    } else {
+      // default is ar
+      let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
+      setLanguage(currentLang);
+      setLang(currentLang);
+    }
+  });
   useEffect(() => {
     // Simulate an API call or a check against stored user data
-    const checkAdminStatus = () => {
-      // Replace this with your actual admin check logic
-      const userRole = localStorage.getItem("userRole"); // Example
-      if (userRole !== "admin") {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-    };
-
-    checkAdminStatus();
     // You might also need to set up listeners for events that could change the admin status
     // (e.g., a WebSocket message, a change in authentication context).
     // For example:
@@ -69,7 +70,9 @@ export default function CurrencyExchangeApp() {
                   <span className="text-sm text-gray-400">
                     {transaction.date}
                   </span>
-                  <span className="text-sm text-yellow-500">{t("completed")}</span>
+                  <span className="text-sm text-yellow-500">
+                    {t("completed")}
+                  </span>
                 </div>
               </div>
             </div>

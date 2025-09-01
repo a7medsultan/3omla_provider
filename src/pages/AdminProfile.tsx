@@ -1,15 +1,25 @@
-
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
-import { t } from '../i18n';
+import { t, setLang } from "../i18n";
+type Lang = "ar" | "en";
 
 export default function CurrencyExchangeApp() {
+  const [language, setLanguage] = useState<Lang>();
 
+  // set the language based on the current language
+  useEffect(() => {
+    if (language) {
+      setLang(language);
+    } else {
+      // default is ar
+      let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
+      setLanguage(currentLang);
+      setLang(currentLang);
+    }
+  });
   useEffect(() => {
     // Simulate an API call or a check against stored user data
-    
-
     // You might also need to set up listeners for events that could change the admin status
     // (e.g., a WebSocket message, a change in authentication context).
     // For example:
@@ -33,8 +43,6 @@ export default function CurrencyExchangeApp() {
               {t("admin_profile")}
             </h3>
           </div>
-
-          
         </div>
       </main>
 

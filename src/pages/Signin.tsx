@@ -3,20 +3,33 @@ import logo from "../assets/beexchange-transparent.png";
 import { Link, useNavigate } from "react-router-dom";
 import CustomModal from "../components/CustomModal";
 import axios from "axios";
-import {t} from "../i18n";
-
+import { t, setLang } from "../i18n";
+type Lang = "ar" | "en";
 export default function CurrencyExchangeApp() {
   const [email, setEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [generatedOtp, setGeneratedOtp] = useState("");
-
+  const [language, setLanguage] = useState<Lang>();
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const verifyProviderUrl = "http://localhost:8080/api/v1/providerVerification/1"; // Replace with your actual API endpoint
+  const verifyProviderUrl =
+    "http://localhost:8080/api/v1/providerVerification/1"; // Replace with your actual API endpoint
 
   const navigate = useNavigate();
+  // set the language based on the current language
+  useEffect(() => {
+    if (language) {
+      setLang(language);
+    } else {
+      // default is ar
+      let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
+      setLanguage(currentLang);
+      setLang(currentLang);
+    }
+  });
+  
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
@@ -155,8 +168,7 @@ export default function CurrencyExchangeApp() {
           ) : (
             <>
               <p className="text-gray-400 text-center mb-8">
-                {t("otp_sent")}{" "}
-                <span className="text-yellow-500">{email}</span>
+                {t("otp_sent")} <span className="text-yellow-500">{email}</span>
               </p>
 
               <div className="flex justify-between mb-8">
@@ -195,7 +207,6 @@ export default function CurrencyExchangeApp() {
           )}
         </form>
         <div id="otpHint"></div>
-        
       </div>
       {showModal && (
         <CustomModal
