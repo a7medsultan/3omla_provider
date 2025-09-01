@@ -62,5 +62,35 @@
   "latest_requests": "أحدث الطلبات",
   "biggest_requests": "أضخم الطلبات",
   "reports": "تقارير",
-  "customer_information": "معلومات العميل"
+
+  "customer_information": "معلومات العميل",
+  "full_name": "الاسم الكامل",
+  "enter_full_name": "أدخل الاسم الكامل",
+  "email_address": "البريد الإلكتروني",
+  "enter_email": "أدخل البريد الإلكتروني",
+  "phone_number": "رقم الهاتف",
+  "enter_phone": "أدخل رقم الهاتف",
+  "whatsapp_number": "رقم الواتساب",
+  "enter_whatsapp": "أدخل رقم الواتساب",
+  "identification_number": "رقم الهوية",
+  "enter_id": "أدخل رقم الهوية أو جواز السفر",
+  "id_help_text": "أدخل رقم الهوية أو جواز السفر",
+
+  "exchange_information": "معلومات التحويل",
+  "from_currency": "من عملة",
+  "to_currency": "إلى عملة",
+  "amount_to_exchange": "المبلغ المراد تحويله",
+  "amount_to_receive": "المبلغ المستلم",
+  "calculated_automatically": "يتم الحساب تلقائياً",
+
+  "payment_information": "معلومات الدفع",
+  "payment_method": "طريقة الدفع",
+  "select_payment_method": "اختر طريقة الدفع",
+  "cash": "نقداً",
+  "bank_transfer": "تحويل بنكي",
+  "credit_card": "بطاقة ائتمان",
+  "mobile_wallet": "محفظة إلكترونية",
+
+  "submit_exchange_request": "إرسال طلب التحويل",
+  "reset_form": "إعادة تعيين النموذج"
 }

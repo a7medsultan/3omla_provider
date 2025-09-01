@@ -61,6 +61,36 @@
   "today_exchange_rates": "Today's Exchange Rates",
   "latest_requests": "Latest Requests",
   "biggest_requests": "Biggest Requests",
-  "reports":"Reports",
-  "customer_information": "Customer Information"
+  "reports": "Reports",
+
+  "customer_information": "Customer Information",
+  "full_name": "Full Name",
+  "enter_full_name": "Enter full name",
+  "email_address": "Email Address",
+  "enter_email": "Enter email address",
+  "phone_number": "Phone Number",
+  "enter_phone": "Enter phone number",
+  "whatsapp_number": "WhatsApp Number",
+  "enter_whatsapp": "Enter WhatsApp number",
+  "identification_number": "Identification Number",
+  "enter_id": "Enter ID/Passport number",
+  "id_help_text": "Enter your ID or Passport number",
+
+  "exchange_information": "Exchange Information",
+  "from_currency": "From Currency",
+  "to_currency": "To Currency",
+  "amount_to_exchange": "Amount to Exchange",
+  "amount_to_receive": "Amount to Receive",
+  "calculated_automatically": "Calculated automatically",
+
+  "payment_information": "Payment Information",
+  "payment_method": "Payment Method",
+  "select_payment_method": "Select payment method",
+  "cash": "Cash",
+  "bank_transfer": "Bank Transfer",
+  "credit_card": "Credit Card",
+  "mobile_wallet": "Mobile Wallet",
+
+  "submit_exchange_request": "Submit Exchange Request",
+  "reset_form": "Reset Form"
 }

@@ -4,7 +4,7 @@ import InnerHeader from "../components/InnerHeader";
 import { useEffect, useState } from "react";
 
 type Lang = "ar" | "en";
-// Define the same interface for type consistency
+
 interface ExchangeData {
   fromCurrency: string;
   fromAmount: number;
@@ -15,15 +15,12 @@ interface ExchangeData {
 export default function RequestExchange() {
   const location = useLocation();
   const [language, setLanguage] = useState<Lang>();
-  // Type-safe way to access the state
   const exData = location.state as ExchangeData;
 
-  // set the language based on the current language
   useEffect(() => {
     if (language) {
       setLang(language);
     } else {
-      // default is ar
       let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
       setLanguage(currentLang);
       setLang(currentLang);
@@ -32,12 +29,9 @@ export default function RequestExchange() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
-      {/* Header */}
       <InnerHeader title="BeEx" />
 
-      {/* Content area */}
       <main className="flex-1 overflow-auto p-4">
-        {/* Recent transactions */}
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold text-yellow-500">
@@ -47,9 +41,8 @@ export default function RequestExchange() {
         </div>
         <div className="max-w-4xl mx-auto">
           <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700">
-
             <form className="p-6 space-y-8">
-
+              {/* Customer Information */}
               <div className="border-b border-gray-600 pb-8">
                 <h2 className="text-lg font-semibold text-yellow-400 mb-4">
                   {t("customer_information")}
@@ -57,83 +50,84 @@ export default function RequestExchange() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Full Name
+                      {t("full_name")}
                     </label>
                     <input
                       type="text"
                       id="guest_name"
                       name="guest_name"
                       className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400"
-                      placeholder="Enter full name"
+                      placeholder={t("enter_full_name")}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Email Address
+                      {t("email_address")}
                     </label>
                     <input
                       type="email"
                       id="guest_email"
                       name="guest_email"
                       className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400"
-                      placeholder="Enter email address"
+                      placeholder={t("enter_email")}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Phone Number
+                      {t("phone_number")}
                     </label>
                     <input
                       type="tel"
                       id="guest_phone"
                       name="guest_phone"
                       className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400"
-                      placeholder="Enter phone number"
+                      placeholder={t("enter_phone")}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      WhatsApp Number
+                      {t("whatsapp_number")}
                     </label>
                     <input
                       type="tel"
                       id="whatsapp"
                       name="whatsapp"
                       className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400"
-                      placeholder="Enter WhatsApp number"
+                      placeholder={t("enter_whatsapp")}
                     />
                   </div>
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Identification Number
+                      {t("identification_number")}
                     </label>
                     <input
                       type="text"
                       id="guest_identification"
                       name="guest_identification"
                       className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400"
-                      placeholder="Enter ID/Passport number"
+                      placeholder={t("enter_id")}
                     />
                     <p className="text-sm text-gray-400 mt-1">
-                      Enter your ID or Passport number
+                      {t("id_help_text")}
                     </p>
                   </div>
                 </div>
               </div>
 
+              {/* Exchange Information */}
               <div className="border-b border-gray-600 pb-8">
                 <h2 className="text-lg font-semibold text-yellow-400 mb-4">
-                  Exchange Information
+                  {t("exchange_information")}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      From Currency <span className="text-red-400">*</span>
+                      {t("from_currency")}{" "}
+                      <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -148,7 +142,7 @@ export default function RequestExchange() {
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      To Currency <span className="text-red-400">*</span>
+                      {t("to_currency")} <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -163,7 +157,8 @@ export default function RequestExchange() {
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Amount to Exchange <span className="text-red-400">*</span>
+                      {t("amount_to_exchange")}{" "}
+                      <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -179,7 +174,8 @@ export default function RequestExchange() {
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Exchange Rate <span className="text-red-400">*</span>
+                      {t("exchange_rate")}{" "}
+                      <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -195,7 +191,8 @@ export default function RequestExchange() {
 
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Amount to Receive <span className="text-red-400">*</span>
+                      {t("amount_to_receive")}{" "}
+                      <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -208,48 +205,54 @@ export default function RequestExchange() {
                       placeholder="0.00"
                     />
                     <p className="text-sm text-gray-400 mt-1">
-                      Calculated automatically
+                      {t("calculated_automatically")}
                     </p>
                   </div>
                 </div>
               </div>
 
+              {/* Payment Information */}
               <div className="pb-8">
                 <h2 className="text-lg font-semibold text-yellow-400 mb-4">
-                  Payment Information
+                  {t("payment_information")}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-yellow-400 mb-2">
-                      Payment Method
+                      {t("payment_method")}
                     </label>
                     <select
                       id="payment_method"
                       name="payment_method"
                       className="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"
                     >
-                      <option value="">Select payment method</option>
-                      <option value="cash">Cash</option>
-                      <option value="bank_transfer">Bank Transfer</option>
-                      <option value="credit_card">Credit Card</option>
-                      <option value="mobile_wallet">Mobile Wallet</option>
+                      <option value="">{t("select_payment_method")}</option>
+                      <option value="cash">{t("cash")}</option>
+                      <option value="bank_transfer">
+                        {t("bank_transfer")}
+                      </option>
+                      <option value="credit_card">{t("credit_card")}</option>
+                      <option value="mobile_wallet">
+                        {t("mobile_wallet")}
+                      </option>
                     </select>
                   </div>
                 </div>
               </div>
 
+              {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-600">
                 <button
                   type="submit"
                   className="flex-1 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold py-2 px-4 rounded-md hover:from-yellow-600 hover:to-yellow-700 focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-200"
                 >
-                  Submit Exchange Request
+                  {t("submit_exchange_request")}
                 </button>
                 <button
                   type="reset"
                   className="flex-1 bg-gray-600 text-gray-200 font-semibold py-2 px-4 rounded-md hover:bg-gray-500 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-200"
                 >
-                  Reset Form
+                  {t("reset_form")}
                 </button>
               </div>
             </form>
