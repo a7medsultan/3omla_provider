@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import Navigation from "../components/Navigation";
 
-import { t } from "../i18n";
+import { t, setLang } from "../i18n";
 import Header from "../components/Header";
-
+type Lang = "ar" | "en";
 // --- CurrencyAmount component ---
 interface Currency {
   id: number;
@@ -125,6 +125,7 @@ export default function CurrencyExchangeApp() {
   const [activeCurrencies, setActiveCurrencies] = useState<Currency[]>([]);
   const [baseCurrency, setBaseCurrency] = useState<Currency | undefined>();
   const [activeTab, setActiveTab] = useState("latest");
+  const [language, setLanguage] = useState<Lang>();
   const navigate = useNavigate();
   useEffect(() => {
     const userData = localStorage.getItem("userData");
@@ -156,6 +157,18 @@ export default function CurrencyExchangeApp() {
       setToCurrency(baseCurrency);
     }
   }, [activeCurrencies, baseCurrency]);
+
+  // set the language based on the current language
+  useEffect(() => {
+    if (language) {
+      setLang(language);
+    } else {
+      // default is ar
+      let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
+      setLanguage(currentLang);
+      setLang(currentLang);
+    }
+  });
 
   /**
    * Calculates the conversion rate based on whether the base currency is
@@ -203,7 +216,20 @@ export default function CurrencyExchangeApp() {
       setToAmount(fixedValue);
     }
   }, [fromAmount, fromCurrency, toCurrency]);
+  const requestExchange = () => {
+    console.log(
+      `from ${fromCurrency?.code} ${fromAmount} to ${toCurrency?.code} ${toAmount}`
+    );
+    const myState = {
+      fromCurrency: fromCurrency?.code,
+      fromAmount: fromAmount,
+      toCurrency: toCurrency?.code,
+      toAmount: toAmount,
+    };
 
+    // Use the navigate function to go to a new route and pass the state
+    navigate("/requestExchange", { state: myState });
+  };
   /**
    * Swaps the 'from' and 'to' currencies. The base currency is always
    * kept as one side of the exchange.
@@ -214,13 +240,6 @@ export default function CurrencyExchangeApp() {
     setFromAmount(toAmount || "");
     setToAmount(fromAmount || "");
   };
-
-  const popularPairs = [
-    { from: "USD", to: "EUR", rate: "0.92", change: "+0.3%" },
-    { from: "EUR", to: "GBP", rate: "0.85", change: "-0.1%" },
-    { from: "USD", to: "JPY", rate: "154.32", change: "+0.5%" },
-    { from: "GBP", to: "USD", rate: "1.25", change: "+0.2%" },
-  ];
 
   // Dynamically set the available currencies for the selectors
   const fromCurrencyList = fromCurrency?.base_currency
@@ -280,10 +299,15 @@ export default function CurrencyExchangeApp() {
                 {calculateRate(fromCurrency, toCurrency).toFixed(4)}{" "}
                 {toCurrency?.code}
               </span>
-              <span className="small-text text-yellow-500">{t("updated_just_now")}</span>
+              <span className="small-text text-yellow-500">
+                {t("updated_just_now")}
+              </span>
             </div>
 
-            <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-full">
+            <button
+              onClick={requestExchange}
+              className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-full"
+            >
               {t("request_exchange")}
             </button>
           </div>
