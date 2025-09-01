@@ -196,7 +196,7 @@ const AdminCurrencies: React.FC = () => {
         <div className="mt-4">
           <button
             onClick={submitRates}
-            className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-lg"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-full"
           >
             {t("confirm_rates")}
           </button>

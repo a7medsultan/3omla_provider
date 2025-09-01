@@ -1,15 +1,16 @@
-
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
-import { t } from '../i18n';
+import { t } from "../i18n";
 
 export default function CurrencyExchangeApp() {
-
+  const navigate = useNavigate();
   useEffect(() => {
-    // Simulate an API call or a check against stored user data
-    
-
+    const userData = localStorage.getItem("userData");
+    if (!userData) {
+      navigate("/signin");
+    }
     // You might also need to set up listeners for events that could change the admin status
     // (e.g., a WebSocket message, a change in authentication context).
     // For example:
@@ -30,16 +31,14 @@ export default function CurrencyExchangeApp() {
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold text-yellow-500">
-              {t("admin_profile")}
+              {t("reports")}
             </h3>
           </div>
-
-          
         </div>
       </main>
 
       {/* Bottom navigation */}
-      <Navigation pageName="AdminProfile" />
+      <Navigation pageName="Reports" />
     </div>
   );
 }

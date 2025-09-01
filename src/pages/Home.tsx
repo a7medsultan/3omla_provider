@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowDownUp,
   Compass,
@@ -115,36 +116,6 @@ const CurrencyPair: React.FC<CurrencyPairProps> = ({
   );
 };
 
-// --- Navigation component ---
-interface NavigationProps {
-  pageName: string;
-}
-
-// const Navigation: React.FC<NavigationProps> = ({ pageName }) => {
-//   const navItems = [
-//     { name: "Home", icon: <ArrowRightLeft /> },
-//     { name: "Discover", icon: <Compass /> },
-//     { name: "Transactions", icon: <HandCoins /> },
-//     { name: "Reports", icon: <BarChart2 /> },
-//   ];
-
-//   return (
-//     <nav className="flex justify-around p-4 bg-gray-800 border-t border-gray-700 shadow-xl">
-//       {navItems.map((item) => (
-//         <button
-//           key={item.name}
-//           className={`flex flex-col items-center text-xs font-semibold ${
-//             pageName === item.name.toLowerCase() ? "text-yellow-500" : "text-gray-400 hover:text-yellow-500"
-//           }`}
-//         >
-//           <span className="mb-1">{item.icon}</span>
-//           {item.name}
-//         </button>
-//       ))}
-//     </nav>
-//   );
-// };
-
 // --- Main App Component ---
 export default function CurrencyExchangeApp() {
   const [fromCurrency, setFromCurrency] = useState<Currency | undefined>();
@@ -154,8 +125,13 @@ export default function CurrencyExchangeApp() {
   const [activeCurrencies, setActiveCurrencies] = useState<Currency[]>([]);
   const [baseCurrency, setBaseCurrency] = useState<Currency | undefined>();
   const [activeTab, setActiveTab] = useState("latest");
-
+  const navigate = useNavigate();
   useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (!userData) {
+      navigate("/signin");
+    }
+
     // Fetches currency data from local storage, with fallback to hardcoded data
     const cachedData = localStorage.getItem("currenciesData");
     if (cachedData) {
@@ -307,7 +283,7 @@ export default function CurrencyExchangeApp() {
               <span className="text-yellow-500">{t("updated_just_now")}</span>
             </div>
 
-            <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-lg">
+            <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-full">
               {t("request_exchange")}
             </button>
           </div>
@@ -315,7 +291,7 @@ export default function CurrencyExchangeApp() {
 
         <div className="mb-6">
           {/* Segmented buttons - full width */}
-          <div className="mb-6 flex rounded-lg overflow-hidden border border-gray-700 w-full max-w-md">
+          <div className="mb-6 flex rounded-full overflow-hidden border border-gray-700 w-full max-w-md">
             <button
               onClick={() => setActiveTab("latest")}
               className={`flex-1 py-2 px-4 transition-colors duration-200 ${

@@ -126,7 +126,7 @@ export default function CurrencyExchangeApp() {
 
         <form
           onSubmit={otpSent ? handleVerifyOtp : handleSendOtp}
-          className="bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-sm"
+          className="p-8 rounded-2xl shadow-lg w-full max-w-sm"
         >
           <h2 className="text-2xl font-bold text-center text-yellow-500 mb-6">
             {otpSent ? t("enter_otp") : t("signin")}
@@ -143,11 +143,11 @@ export default function CurrencyExchangeApp() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
-                className="w-full p-3 rounded-lg border border-gray-700 bg-gray-700 text-gray-100 mb-6 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full p-4 rounded-full border border-gray-700 bg-gray-700 text-gray-100 mb-6 focus:outline-none focus:ring-1 focus:ring-yellow-500"
               />
               <button
                 type="submit"
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-2 rounded-lg transition-colors"
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-4 rounded-full transition-colors"
               >
                 {t("send_otp")}
               </button>

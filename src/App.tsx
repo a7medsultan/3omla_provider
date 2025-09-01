@@ -8,6 +8,7 @@ import Settings from "./pages/Settings";
 import AdminCurrencies from "./pages/AdminCurrencies";
 import AdminHistory from "./pages/AdminHistory";
 import AdminProfile from "./pages/AdminProfile";
+import Reports from "./pages/Reports";
 import "./App.css";
 
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Route path="/adminCurrencies" element={<AdminCurrencies />} />
         <Route path="/adminHistory" element={<AdminHistory />} />
         <Route path="/adminProfile" element={<AdminProfile />} />
+        <Route path="/reports" element={<Reports />} />
       </Routes>
     </Router>
   );
