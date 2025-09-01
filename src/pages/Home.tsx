@@ -275,12 +275,12 @@ export default function CurrencyExchangeApp() {
             />
 
             <div className="flex justify-between text-sm mb-4">
-              <span className="text-gray-400">
+              <span className="small-text text-gray-400">
                 {t("rate")}: 1 {fromCurrency?.code} ={" "}
                 {calculateRate(fromCurrency, toCurrency).toFixed(4)}{" "}
                 {toCurrency?.code}
               </span>
-              <span className="text-yellow-500">{t("updated_just_now")}</span>
+              <span className="small-text text-yellow-500">{t("updated_just_now")}</span>
             </div>
 
             <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-4 rounded-full">
