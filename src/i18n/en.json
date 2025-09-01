@@ -61,5 +61,6 @@
   "today_exchange_rates": "Today's Exchange Rates",
   "latest_requests": "Latest Requests",
   "biggest_requests": "Biggest Requests",
-  "reports":"Reports"
+  "reports":"Reports",
+  "customer_information": "Customer Information"
 }
