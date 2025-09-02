@@ -158,11 +158,11 @@ const AdminCurrencies: React.FC = () => {
         `http://localhost:8080/api/v1/setRates/${provider_id}`,
         dataToSend
       );
-      setModalMessage("Rates submitted successfully");
+      setModalMessage(t("rates_submitted_successfully"));
       setShowModal(true);
     } catch (error) {
       console.error("Error submitting rates:", error);
-      setModalMessage("Error submitting rates. Please try again.");
+      setModalMessage(t("error_submitting_rates"));
       setShowModal(true);
     }
   };

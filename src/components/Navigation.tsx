@@ -18,7 +18,7 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
           <ArrowRightLeft size={20} />
         </Link>
         <Link to="/">
-          <span className="text-xs mt-1">{t("home")}</span>
+          <span className="text-xs mt-1">{t("exchange")}</span>
         </Link>
       </button>
       <button

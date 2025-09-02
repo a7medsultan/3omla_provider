@@ -97,5 +97,8 @@
   "exchange_request_error": "There was an error submitting your request. Please try again.",
   "fill_required_fields": "Please fill in all required fields",
   "Notification": "Notification",
-  "OK": "OK"
+  "OK": "OK",
+  "exchange": "Exchange",
+  "error_submitting_rates": "There was an error submitting the rates. Please try again.",
+  "rates_submitted_successfully": "Rates submitted successfully."
 }
