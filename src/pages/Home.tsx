@@ -217,14 +217,16 @@ export default function CurrencyExchangeApp() {
     }
   }, [fromAmount, fromCurrency, toCurrency]);
   const requestExchange = () => {
-    console.log(
-      `from ${fromCurrency?.code} ${fromAmount} to ${toCurrency?.code} ${toAmount}`
-    );
+    const rate = calculateRate(fromCurrency, toCurrency);
+    console.log("Calculated rate:", rate);
     const myState = {
       fromCurrency: fromCurrency?.code,
+      fromFlag: fromCurrency?.flag_emoji,
       fromAmount: fromAmount,
       toCurrency: toCurrency?.code,
+      toFlag: toCurrency?.flag_emoji,
       toAmount: toAmount,
+      rate: rate,
     };
 
     // Use the navigate function to go to a new route and pass the state
