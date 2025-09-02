@@ -1,8 +1,10 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { t, setLang } from "../i18n";
 import InnerHeader from "../components/InnerHeader";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CustomModal from "../components/CustomModal";
+import Loader from "../components/Loader";
 
 type Lang = "ar" | "en";
 
@@ -17,9 +19,14 @@ interface ExchangeData {
 }
 
 export default function RequestExchange() {
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [language, setLanguage] = useState<Lang>();
   const exData = location.state as ExchangeData;
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (language) {
@@ -29,19 +36,13 @@ export default function RequestExchange() {
       setLanguage(currentLang);
       setLang(currentLang);
     }
-  });
+  }, [language]); // ✅ add dependency array
 
-  const submitHandler = (e: React.FormEvent) => {
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    // Basic validation
-    const requiredFields = [
-      "guest_name",
-      //"guest_email",
-      "guest_phone",
-      "whatsapp",
-      //"guest_identification",
-    ];
+    setLoading(true);
+
+    const requiredFields = ["guest_name", "guest_phone", "whatsapp"];
     let isValid = true;
 
     requiredFields.forEach((field) => {
@@ -59,7 +60,6 @@ export default function RequestExchange() {
     });
 
     if (isValid) {
-      // populate fields
       const fullName = document.getElementById(
         "guest_name"
       ) as HTMLInputElement;
@@ -88,43 +88,61 @@ export default function RequestExchange() {
         "exchange_rate"
       ) as HTMLInputElement;
 
-      // Send data to backend API
       const requestData = {
-        fullName: fullName.value,
-        email: email.value,
-        phone: phone.value,
+        guest_name: fullName.value,
+        guest_email: email.value,
+        guest_phone: phone.value,
         whatsapp: whatsapp.value,
-        idNumber: idNumber.value,
-        paymentMethod: paymentMethod.value,
-        fromCurrency: baseCurrency.value,
-        toCurrency: targetCurrency.value,
-        fromAmount: parseFloat(baseAmount.value),
-        toAmount: parseFloat(targetAmount.value),
-        exchangeRate: parseFloat(exchangeRate.value),
+        guest_identification: idNumber.value,
+        payment_method: paymentMethod.value,
+        base_currency: baseCurrency.value,
+        target_currency: targetCurrency.value,
+        base_amount: parseFloat(baseAmount.value),
+        target_amount: parseFloat(targetAmount.value),
+        exchange_rate: parseFloat(exchangeRate.value),
+        provider_id: userData ? userData.provider_id : null,
       };
-      console.log("Submitting request data:", requestData);
-      axios
-        .post("https://api.beex.com/exchange-requests", requestData)
-        .then((response) => {
-          console.log("Response from server:", response.data);
-          alert("Exchange request submitted successfully!");
-          // Optionally, reset the form here
-        })
-        .catch((error) => {
-          console.error("Error submitting exchange request:", error);
-          alert(
-            "There was an error submitting your request. Please try again."
-          );
-        });
+
+      try {
+        const response = await axios.post(
+          `http://localhost:8080/api/v1/requestExchange/${
+            userData ? userData.provider_id : null
+          }`,
+          requestData
+        );
+        setModalMessage(t("exchange_request_success"));
+        setShowModal(true);
+        // reset form fields
+        (document.getElementById("guest_name") as HTMLInputElement).value = "";
+        (document.getElementById("guest_email") as HTMLInputElement).value = "";
+        (document.getElementById("guest_phone") as HTMLInputElement).value = "";
+        (document.getElementById("whatsapp") as HTMLInputElement).value = "";
+        (
+          document.getElementById("guest_identification") as HTMLInputElement
+        ).value = "";
+        (document.getElementById("payment_method") as HTMLSelectElement).value =
+          "";
+
+        // navigate back to home after a short delay
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (error) {
+        console.error("Error submitting exchange request:", error);
+        setModalMessage(t("exchange_request_error"));
+        setShowModal(true);
+      }
+      setLoading(false);
     } else {
-      alert("Please fill in all required fields.");
+      setModalMessage(t("fill_required_fields"));
+      setShowModal(true);
+      setLoading(false); // ✅ make sure loader hides even if invalid
     }
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       <InnerHeader title="BeEx" />
-
       <main className="flex-1 overflow-auto p-4">
         <div>
           <div className="flex justify-between items-center mb-3">
@@ -345,15 +363,18 @@ export default function RequestExchange() {
             >
               {t("submit_exchange_request")}
             </button>
-            <button
-              type="reset"
-              className="flex-1 bg-gray-600 text-gray-200 font-semibold py-2 px-4 rounded-md hover:bg-gray-500 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-200"
-            >
-              {t("reset_form")}
-            </button>
           </div>
         </div>
       </main>
+
+      {showModal && (
+        <CustomModal
+          message={modalMessage}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
+      {loading && <Loader />}
     </div>
   );
 }

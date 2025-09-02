@@ -92,5 +92,10 @@
   "mobile_wallet": "Mobile Wallet",
 
   "submit_exchange_request": "Submit Exchange Request",
-  "reset_form": "Reset Form"
+  "reset_form": "Reset Form",
+  "exchange_request_success": "Exchange request submitted successfully",
+  "exchange_request_error": "There was an error submitting your request. Please try again.",
+  "fill_required_fields": "Please fill in all required fields",
+  "Notification": "Notification",
+  "OK": "OK"
 }

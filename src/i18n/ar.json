@@ -92,5 +92,10 @@
   "mobile_wallet": "محفظة إلكترونية",
 
   "submit_exchange_request": "إرسال طلب التحويل",
-  "reset_form": "إعادة تعيين النموذج"
+  "reset_form": "إعادة تعيين النموذج",
+  "exchange_request_success": "تم إرسال طلب التحويل بنجاح",
+  "exchange_request_error": "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى.",
+  "fill_required_fields": "يرجى ملء جميع الحقول المطلوبة",
+  "Notification": "إشعار",
+  "OK": "موافق"
 }
