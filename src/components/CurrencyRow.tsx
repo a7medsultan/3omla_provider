@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { t } from "../i18n";
 
 interface Currency {
   id: number;
@@ -40,14 +41,14 @@ const CurrencyRow: React.FC<CurrenciesProps> = ({
 }) => {
   return (
     <div className="bg-gray-800 rounded-lg p-4 mb-3 border border-gray-700 flex items-center">
-      <div className="bg-gray-700 p-3 rounded-full mr-3">
+      <div className="bg-gray-700 p-3 rounded-full">
         {currency.flag_emoji}
       </div>
-      <div className="flex-1">
+      <div className="flex-1 mx-2">
         <div className="flex justify-between">
           <span className="font-medium">{currency.name}</span>
           <span className="font-bold">
-            Sell{" "}
+            {t("sell")}{" "}
             <input
               type="number"
               value={rate?.sell_rate ?? ""}
@@ -65,7 +66,7 @@ const CurrencyRow: React.FC<CurrenciesProps> = ({
         <div className="flex justify-between mt-1">
           <span className="text-sm text-gray-400">1 {currency.code}</span>
           <span className="font-bold">
-            Buy{" "}
+            {t("buy")}{" "}
             <input
               type="number"
               value={rate?.buy_rate ?? ""}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
 import { t, setLang } from "../i18n";
@@ -47,7 +47,7 @@ export default function CurrencyExchangeApp() {
       </main>
 
       {/* Bottom navigation */}
-      <Navigation pageName="AdminProfile" />
+      <Navigation pageName="adminProfile" />
     </div>
   );
 }

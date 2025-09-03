@@ -219,7 +219,7 @@ const AdminCurrencies: React.FC = () => {
         </div>
       </main>
 
-      <Navigation pageName="userCurrencies" />
+      <Navigation pageName="adminCurrencies" />
       {showModal && (
         <CustomModal
           message={modalMessage}

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
 import { t, setLang } from "../i18n";
@@ -53,7 +53,7 @@ export default function CurrencyExchangeApp() {
       </main>
 
       {/* Bottom navigation */}
-      <Navigation pageName="Reports" />
+      <Navigation pageName="reports" />
     </div>
   );
 }

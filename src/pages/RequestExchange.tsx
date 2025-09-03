@@ -104,7 +104,7 @@ export default function RequestExchange() {
       };
 
       try {
-        const response = await axios.post(
+        await axios.post(
           `http://localhost:8080/api/v1/requestExchange/${
             userData ? userData.provider_id : null
           }`,

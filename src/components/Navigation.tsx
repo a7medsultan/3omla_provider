@@ -1,4 +1,4 @@
-import { Home, Globe, Repeat, User, ArrowRightLeft, Coins, BarChart2 } from "lucide-react";
+import { Repeat, User, ArrowRightLeft, Coins, BarChart2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { t } from '../i18n';
 
