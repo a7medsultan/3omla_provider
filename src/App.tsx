@@ -10,6 +10,7 @@ import AdminHistory from "./pages/AdminHistory";
 import AdminProfile from "./pages/AdminProfile";
 import Reports from "./pages/Reports";
 import RequestExchange from "./pages/RequestExchange";
+import RequestDetails from "./pages/RequestDetails";
 import "./App.css";
 
 const App: React.FC = () => {
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/adminProfile" element={<AdminProfile />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/requestExchange" element={<RequestExchange />} />
+        <Route path="/requestDetails" element={<RequestDetails />} />
       </Routes>
     </Router>
   );

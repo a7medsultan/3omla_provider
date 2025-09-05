@@ -317,7 +317,7 @@ export default function CurrencyExchangeApp() {
 
         <div className="mb-6">
           {/* Segmented buttons - full width */}
-          <div className="mb-6 flex rounded-full overflow-hidden border border-gray-700 w-full max-w-md">
+          <div className="mb-6 flex rounded-full overflow-hidden border border-gray-700 w-full">
             <button
               onClick={() => setActiveTab("latest")}
               className={`flex-1 py-2 px-4 transition-colors duration-200 ${
@@ -342,13 +342,13 @@ export default function CurrencyExchangeApp() {
 
           {/* Tab content */}
           {activeTab === "latest" && (
-            <div className="bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-lg space-y-6">
+            <div className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6">
               soon .. latest requests
             </div>
           )}
 
           {activeTab === "biggest" && (
-            <div className="bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-lg space-y-6">
+            <div className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6">
               soon .. biggest requests
             </div>
           )}
