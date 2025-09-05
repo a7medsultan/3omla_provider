@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useSwipeable } from "react-swipeable";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExchangeBox from "../components/ExchangeBox";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";

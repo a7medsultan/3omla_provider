@@ -16,6 +16,8 @@ import {
 import { useEffect, useState, useRef } from "react";
 import { t, setLang } from "../i18n";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Loader from "../components/Loader";
 
 type Lang = "ar" | "en";
 
@@ -50,13 +52,16 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
   targetAmount,
   exRate,
   exDate,
-  exStatus,
+  exStatus: exStatusProp,
   onPress,
 }) => {
   const [isPressed, setIsPressed] = useState(false);
   const [language, setLanguage] = useState<Lang>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [exchangeRequests, setExchangeRequests] = useState<any[]>([]);
+  const [exStatus, setExStatus] = useState(exStatusProp);
   const navigate = useNavigate();
   // Close menu when clicking outside
   useEffect(() => {
@@ -91,7 +96,6 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
         icon: Eye,
         label: t("viewDetails") || "View Details",
         action: () => {
-          console.log("View details for", refNo);
           // Add your view details logic here
           const myState = {
             index: index,
@@ -157,6 +161,7 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
         action: () => {
           console.log("Mark completed transaction", refNo);
           // Add mark completed logic here
+          updateStatus("completed");
         },
         success: true,
         danger: false,
@@ -168,6 +173,7 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
         action: () => {
           console.log("Cancel transaction", refNo);
           // Add cancel logic here
+          updateStatus("cancelled");
         },
         success: false,
         danger: true,
@@ -191,6 +197,53 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
     }
 
     return baseItems;
+  };
+
+  const updateStatus = (newStatus: string) => {
+    setLoading(true);
+    // Example API call to update status
+    axios
+      .post(`http://localhost:8080/api/v1/updateRequestStatus`, {
+        reference_number: refNo,
+        status: newStatus,
+      })
+      .then((response) => {
+        // Optionally refresh data or give user feedback
+        fetchExchangeRequests(true); // Force refresh
+        // update the state of exStatus if needed
+        setExStatus(newStatus);
+      })
+      .catch((error) => {
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const fetchExchangeRequests = (forceRefresh = false) => {
+    setLoading(true);
+
+    if (!forceRefresh) {
+      const cached = localStorage.getItem("exchangeRequests");
+      if (cached) {
+        setExchangeRequests(JSON.parse(cached));
+        setLoading(false); // ✅ stop loader if cache is used
+        return;
+      }
+    }
+
+    axios
+      .get(`http://localhost:8080/api/v1/recentRequests/1/0`)
+      .then((response) => {
+        setExchangeRequests(response.data);
+        localStorage.setItem("exchangeRequests", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false); // ✅ stop loader after API call finishes
+      });
   };
 
   // Format currency amounts for mobile (shorter format)
@@ -405,7 +458,9 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
           </div>
         </div>
       </div>
+      {loading ? <Loader /> : null}
     </div>
+    
   );
 };
 
