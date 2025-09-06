@@ -122,5 +122,18 @@
   "exchange_details": "تفاصيل التحويل",
   "service_fee": "رسوم الخدمة",
   "biggest_buy_requests": "أضخم طلبات الشراء",
-  "biggest_sell_requests": "أضخم طلبات البيع"
+  "biggest_sell_requests": "أضخم طلبات البيع",
+  "field_required": "هذا الحقل مطلوب",
+  "invalid_email": "عنوان بريد إلكتروني غير صالح",
+  "invalid_number": "رقم غير صالح",
+  "invalid_phone": "رقم الهاتف غير صالح",
+  "min_length": "الحد الأدنى للطول هو {{min}} حرف",
+  "max_length": "الحد الأقصى للطول هو {{max}} حرف",
+  "min_value": "القيمة الدنيا هي {{min}}",
+  "max_value": "القيمة الأعلى هي {{max}}",
+  "request_summary": "ملخص الطلب",
+  "amount":"المبلغ",
+  "pending_approval": "في الانتظار",
+  "previous": "السابق",
+  "next": "التالي"
 }

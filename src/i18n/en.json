@@ -122,5 +122,19 @@
   "exchange_details": "Exchange Details",
   "service_fee": "Service Fee",
   "biggest_buy_requests": "Biggest Buy Requests",
-  "biggest_sell_requests": "Biggest Sell Requests"
+  "biggest_sell_requests": "Biggest Sell Requests",
+  "field_required": "This field is required",
+  "invalid_email": "Invalid email address",
+  "invalid_number": "Invalid number",
+  "invalid_phone": "Invalid phone number",
+  "min_length": "Minimum length is {{min}} characters",
+  "max_length": "Maximum length is {{max}} characters",
+  "min_value": "Minimum value is {{min}}",
+  "max_value": "Maximum value is {{max}}",
+  "request_summary": "Request Summary",
+  "amount":"Amount",
+  "pending_approval": "Pending Approval",
+  "previous": "Previous",
+  "next": "Next"
+
 }
