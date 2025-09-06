@@ -120,5 +120,7 @@
   "status": "Status",
   "transaction_details": "Transaction Details",
   "exchange_details": "Exchange Details",
-  "service_fee": "Service Fee"
+  "service_fee": "Service Fee",
+  "biggest_buy_requests": "Biggest Buy Requests",
+  "biggest_sell_requests": "Biggest Sell Requests"
 }

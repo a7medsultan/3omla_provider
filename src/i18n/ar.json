@@ -120,5 +120,7 @@
   "status": "الحالة",
   "transaction_details": "تفاصيل المعاملة",
   "exchange_details": "تفاصيل التحويل",
-  "service_fee": "رسوم الخدمة"
+  "service_fee": "رسوم الخدمة",
+  "biggest_buy_requests": "أضخم طلبات الشراء",
+  "biggest_sell_requests": "أضخم طلبات البيع"
 }

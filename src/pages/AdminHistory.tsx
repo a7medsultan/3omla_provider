@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useSwipeable } from "react-swipeable";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ExchangeBox from "../components/ExchangeBox";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
@@ -12,7 +12,7 @@ type Lang = "ar" | "en";
 const adminHistory = () => {
   const [language, setLanguage] = useState<Lang>();
   const [exchangeRequests, setExchangeRequests] = useState<any[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   
   // set the language based on the current language
   useEffect(() => {

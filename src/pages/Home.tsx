@@ -6,11 +6,14 @@ import {
   ArrowRightLeft,
   HandCoins,
   BarChart2,
+  Loader,
 } from "lucide-react";
 import Navigation from "../components/Navigation";
-
+import axios from "axios";
 import { t, setLang } from "../i18n";
 import Header from "../components/Header";
+import ExchangeBox from "../components/ExchangeBox";
+import { useSwipeable } from "react-swipeable";
 type Lang = "ar" | "en";
 // --- CurrencyAmount component ---
 interface Currency {
@@ -126,6 +129,8 @@ export default function CurrencyExchangeApp() {
   const [baseCurrency, setBaseCurrency] = useState<Currency | undefined>();
   const [activeTab, setActiveTab] = useState("latest");
   const [language, setLanguage] = useState<Lang>();
+  const [exchangeRequests, setExchangeRequests] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const userData = localStorage.getItem("userData");
@@ -144,6 +149,18 @@ export default function CurrencyExchangeApp() {
       setBaseCurrency(base);
     }
   }, []);
+
+  // -----------------------------
+  // Swipe handlers (refresh)
+  // -----------------------------
+  const handlers = useSwipeable({
+    onSwipedDown: () => {
+      console.log("Swiped down → refreshing currencies");
+      setLoading(true);
+      fetchExchangeRequests(true); // ✅ force refresh from API
+    },
+    delta: 50,
+  });
 
   useEffect(() => {
     // Set default currencies after data is loaded
@@ -251,11 +268,46 @@ export default function CurrencyExchangeApp() {
     ? [toCurrency]
     : activeCurrencies;
 
+  // show latest requests from local storage if not available fetch them
+  // populate data using axios
+  useEffect(() => {
+    fetchExchangeRequests();
+  }, []);
+  const fetchExchangeRequests = (forceRefresh = false) => {
+    setLoading(true);
+
+    if (!forceRefresh) {
+      const cached = localStorage.getItem("exchangeRequests");
+      if (cached) {
+        setExchangeRequests(JSON.parse(cached));
+        setLoading(false); // ✅ stop loader if cache is used
+        return;
+      }
+    }
+
+    axios
+      .get(`http://localhost:8080/api/v1/recentRequests/1/0`)
+      .then((response) => {
+        setExchangeRequests(response.data);
+        localStorage.setItem("exchangeRequests", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false); // ✅ stop loader after API call finishes
+      });
+  };
+
+  const handleCurrencyPress = (refNo: string) => {
+    // In a real Capacitor app, you might navigate to a detail page
+  };
+
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100 font-sans">
       <Header title="BeEx" />
 
-      <main className="flex-1 overflow-auto p-4">
+      <main {...handlers} className="flex-1 overflow-auto p-4">
         {activeCurrencies.length === 0 || !baseCurrency ? (
           <div className="bg-red-500 text-white p-4 rounded-lg mb-4">
             <p className="text-center">{t("please_set_active_currencies")}</p>
@@ -320,7 +372,7 @@ export default function CurrencyExchangeApp() {
           <div className="mb-6 flex rounded-full overflow-hidden border border-gray-700 w-full">
             <button
               onClick={() => setActiveTab("latest")}
-              className={`flex-1 py-2 px-4 transition-colors duration-200 ${
+              className={`flex-1 py-2 px-4 transition-colors duration-200 text-sm ${
                 activeTab === "latest"
                   ? "bg-yellow-500 text-gray-900"
                   : "bg-gray-800 text-gray-100 hover:bg-gray-700"
@@ -329,33 +381,145 @@ export default function CurrencyExchangeApp() {
               {t("latest_requests")}
             </button>
             <button
-              onClick={() => setActiveTab("biggest")}
-              className={`flex-1 py-2 px-4 transition-colors duration-200 ${
-                activeTab === "biggest"
+              onClick={() => setActiveTab("biggest_buy")}
+              className={`flex-1 py-2 px-4 transition-colors duration-200 text-sm ${
+                activeTab === "biggest_buy"
                   ? "bg-yellow-500 text-gray-900"
                   : "bg-gray-800 text-gray-100 hover:bg-gray-700"
               }`}
             >
-              {t("biggest_requests")}
+              {t("biggest_buy_requests")}
+            </button>
+            <button
+              onClick={() => setActiveTab("biggest_sell")}
+              className={`flex-1 py-2 px-4 transition-colors duration-200 text-sm ${
+                activeTab === "biggest_sell"
+                  ? "bg-yellow-500 text-gray-900"
+                  : "bg-gray-800 text-gray-100 hover:bg-gray-700"
+              }`}
+            >
+              {t("biggest_sell_requests")}
             </button>
           </div>
 
           {/* Tab content */}
           {activeTab === "latest" && (
-            <div className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6">
-              soon .. latest requests
+            <div
+              id="latest-requests"
+              className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6"
+            >
+              {
+                // fetch latest 5 exchange requests
+                exchangeRequests
+                  .filter(
+                    (req) =>
+                      req.status === "pending" || req.status === "processing"
+                  )
+                  .slice(0, 5)
+                  .map((data) => (
+                    <ExchangeBox
+                      index={data.id}
+                      refNo={data.reference_number}
+                      guest_name={data.guest_name}
+                      guest_email={data.guest_email}
+                      guest_phone={data.guest_phone}
+                      whatsapp={data.whatsapp}
+                      fromCurrency={data.base_currency}
+                      toCurrency={data.target_currency}
+                      baseAmount={data.base_amount}
+                      targetAmount={data.target_amount}
+                      exRate={data.exchange_rate}
+                      exDate={data.created_at}
+                      exStatus={data.status}
+                      key={data.id}
+                      {...data}
+                      onPress={() => handleCurrencyPress(data.reference_number)}
+                    />
+                  ))
+              }
             </div>
           )}
 
-          {activeTab === "biggest" && (
-            <div className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6">
-              soon .. biggest requests
+          {activeTab === "biggest_sell" && (
+            <div
+              id="biggest-sell-requests"
+              className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6"
+            >
+              {
+                // fetch latest 5 exchange requests
+                exchangeRequests
+                  .filter(
+                    (req) =>
+                      (req.status === "pending" || req.status === "processing") && req.base_currency === baseCurrency?.code
+                  )
+                  .slice(0, 5)
+                  .sort((a, b) => b.base_amount - a.base_amount)
+                  .map((data) => (
+                    <ExchangeBox
+                      index={data.id}
+                      refNo={data.reference_number}
+                      guest_name={data.guest_name}
+                      guest_email={data.guest_email}
+                      guest_phone={data.guest_phone}
+                      whatsapp={data.whatsapp}
+                      fromCurrency={data.base_currency}
+                      toCurrency={data.target_currency}
+                      baseAmount={data.base_amount}
+                      targetAmount={data.target_amount}
+                      exRate={data.exchange_rate}
+                      exDate={data.created_at}
+                      exStatus={data.status}
+                      key={data.id}
+                      {...data}
+                      onPress={() => handleCurrencyPress(data.reference_number)}
+                    />
+                  ))
+              }
+            </div>
+          )}
+
+          {activeTab === "biggest_buy" && (
+            <div
+              id="biggest-buy-requests"
+              className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6"
+            >
+              {
+                // fetch latest 5 exchange requests
+                exchangeRequests
+                  .filter(
+                    (req) =>
+                      (req.status === "pending" || req.status === "processing") && req.target_currency === baseCurrency?.code
+                  )
+                  .slice(0, 5)
+                  .sort((a, b) => b.target_amount - a.target_amount)
+                  .map((data) => (
+                    <ExchangeBox
+                      index={data.id}
+                      refNo={data.reference_number}
+                      guest_name={data.guest_name}
+                      guest_email={data.guest_email}
+                      guest_phone={data.guest_phone}
+                      whatsapp={data.whatsapp}
+                      fromCurrency={data.base_currency}
+                      toCurrency={data.target_currency}
+                      baseAmount={data.base_amount}
+                      targetAmount={data.target_amount}
+                      exRate={data.exchange_rate}
+                      exDate={data.created_at}
+                      exStatus={data.status}
+                      key={data.id}
+                      {...data}
+                      onPress={() => handleCurrencyPress(data.reference_number)}
+                    />
+                  ))
+              }
             </div>
           )}
         </div>
       </main>
 
       <Navigation pageName="home" />
+      {loading ? <Loader /> : null}
     </div>
   );
 }
