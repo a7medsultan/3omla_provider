@@ -1,4 +1,4 @@
-import { Bell, Lock, Menu, Settings } from 'lucide-react';
+import { Bell, Lock, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // Define the props for the component

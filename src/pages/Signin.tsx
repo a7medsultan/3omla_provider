@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/beexchange-transparent.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CustomModal from "../components/CustomModal";
 import axios from "axios";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
 import { t, setLang } from "../i18n";
 type Lang = "ar" | "en";
 export default function CurrencyExchangeApp() {
@@ -14,8 +16,7 @@ export default function CurrencyExchangeApp() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const verifyProviderUrl =
-    "http://localhost:8080/api/v1/providerVerification/1"; // Replace with your actual API endpoint
+  const verifyProviderUrl = `${API_URL}/providerVerification/1`; // Replace with your actual API endpoint
 
   const navigate = useNavigate();
   // set the language based on the current language
@@ -29,7 +30,7 @@ export default function CurrencyExchangeApp() {
       setLang(currentLang);
     }
   });
-  
+
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {

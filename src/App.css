@@ -18,3 +18,10 @@ div {
 .small-text {
   font-size: 0.7rem;
 }
+input[type="number"] {
+  text-align: start;
+}
+
+input[type="number"]::placeholder {
+  text-align: start;
+}

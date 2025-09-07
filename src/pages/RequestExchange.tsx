@@ -5,6 +5,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CustomModal from "../components/CustomModal";
 import Loader from "../components/Loader";
+import logo from "../../src/assets/beexchange-transparent.png";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowRightLeft,
+  CreditCard,
+  TriangleAlert,
+  User,
+} from "lucide-react";
 
 type Lang = "ar" | "en";
 
@@ -144,7 +155,7 @@ export default function RequestExchange() {
 
       try {
         await axios.post(
-          `http://localhost:8080/api/v1/requestExchange/${
+          `${API_URL}/requestExchange/${
             userData ? userData.provider_id : null
           }`,
           requestData
@@ -178,9 +189,21 @@ export default function RequestExchange() {
   };
 
   const steps = [
-    { id: 1, title: t("customer_information"), icon: "👤" },
-    { id: 2, title: t("exchange_information"), icon: "💱" },
-    { id: 3, title: t("payment_information"), icon: "💳" },
+    {
+      id: 1,
+      title: t("customer_information"),
+      icon: <User size={20} />,
+    },
+    {
+      id: 2,
+      title: t("exchange_information"),
+      icon: <ArrowRightLeft size={20} />,
+    },
+    {
+      id: 3,
+      title: t("payment_information"),
+      icon: <CreditCard size={20} />,
+    },
   ];
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 3));
@@ -193,14 +216,15 @@ export default function RequestExchange() {
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full mb-4 shadow-lg">
-            <span className="text-2xl">💱</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 shadow-lg">
+            {/* logo */}
+            <img src={logo} />
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent mb-2">
             {t("request_exchange")}
           </h1>
           <p className="text-gray-400 text-lg">
-            Fill in your details to process your currency exchange request
+            {t("fill_details_to_process_exchange")}
           </p>
         </div>
 
@@ -243,7 +267,7 @@ export default function RequestExchange() {
 
         {/* Main Form Card */}
         <div className="bg-gradient-to-br from-gray-800 to-gray-800/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
-          <div className="p-8">
+          <div className="p-4">
             {/* Step 1: Customer Information */}
             {currentStep === 1 && (
               <div className="space-y-6 animate-fadeIn">
@@ -268,7 +292,9 @@ export default function RequestExchange() {
                         name="guest_name"
                         value={formData.guest_name}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
+                        className={`w-full ${
+                          language === "ar" ? "pr-10" : "pl-10"
+                        } py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
                           placeholder-gray-400 transition-all duration-300 focus:ring-2 focus:ring-yellow-500/50 
                           focus:border-yellow-500 hover:bg-gray-700/70 ${
                             formErrors.guest_name
@@ -277,13 +303,30 @@ export default function RequestExchange() {
                           }`}
                         placeholder={t("enter_full_name")}
                       />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-yellow-500">👤</span>
+                      <div
+                        className={`absolute inset-y-0 ${
+                          language === "ar" ? "right-3" : "left-3"
+                        } flex items-center `}
+                      >
+                        <span className="text-yellow-500">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"></path>
+                          </svg>
+                        </span>
                       </div>
                     </div>
                     {formErrors.guest_name && (
                       <p className="text-red-400 text-sm flex items-center">
-                        <span className="mr-1">⚠️</span> {formErrors.guest_name}
+                        <span className="mr-1">
+                          <TriangleAlert />
+                        </span>{" "}
+                        {formErrors.guest_name}
                       </p>
                     )}
                   </div>
@@ -298,7 +341,9 @@ export default function RequestExchange() {
                         id="guest_email"
                         name="guest_email"
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
+                        className={`w-full ${
+                          language === "ar" ? "pr-10" : "pl-10"
+                        } py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
                           placeholder-gray-400 transition-all duration-300 focus:ring-2 focus:ring-yellow-500/50 
                           focus:border-yellow-500 hover:bg-gray-700/70 ${
                             formErrors.guest_email
@@ -307,13 +352,29 @@ export default function RequestExchange() {
                           }`}
                         placeholder={t("enter_email")}
                       />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-yellow-500">📧</span>
+                      <div
+                        className={`absolute inset-y-0 ${
+                          language === "ar" ? "right-3" : "left-3"
+                        } flex items-center `}
+                      >
+                        <span className="text-yellow-500">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M128,24a104,104,0,0,0,0,208c21.51,0,44.1-6.48,60.43-17.33a8,8,0,0,0-8.86-13.33C166,210.38,146.21,216,128,216a88,88,0,1,1,88-88c0,26.45-10.88,32-20,32s-20-5.55-20-32V88a8,8,0,0,0-16,0v4.26a48,48,0,1,0,5.93,65.1c6,12,16.35,18.64,30.07,18.64,22.54,0,36-17.94,36-48A104.11,104.11,0,0,0,128,24Zm0,136a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
+                          </svg>
+                        </span>
                       </div>
                     </div>
                     {formErrors.guest_email && (
                       <p className="text-red-400 text-sm flex items-center">
-                        <span className="mr-1">⚠️</span>{" "}
+                        <span className="mr-1">
+                          <TriangleAlert />
+                        </span>{" "}
                         {formErrors.guest_email}
                       </p>
                     )}
@@ -330,22 +391,39 @@ export default function RequestExchange() {
                         id="guest_phone"
                         name="guest_phone"
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
+                        className={`w-full ${
+                          language === "ar" ? "pr-10" : "pl-10"
+                        } py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
                           placeholder-gray-400 transition-all duration-300 focus:ring-2 focus:ring-yellow-500/50 
                           focus:border-yellow-500 hover:bg-gray-700/70 ${
                             formErrors.guest_phone
                               ? "border-red-500 focus:ring-red-500/50"
                               : "border-gray-600"
                           }`}
-                        placeholder={t("enter_phone")}
                       />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-yellow-500">📱</span>
+                      <div
+                        className={`absolute inset-y-0 ${
+                          language === "ar" ? "right-3" : "left-3"
+                        } flex items-center `}
+                      >
+                        <span className="text-yellow-500">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"></path>
+                          </svg>
+                        </span>
                       </div>
                     </div>
                     {formErrors.guest_phone && (
                       <p className="text-red-400 text-sm flex items-center">
-                        <span className="mr-1">⚠️</span>{" "}
+                        <span className="mr-1">
+                          <TriangleAlert />
+                        </span>{" "}
                         {formErrors.guest_phone}
                       </p>
                     )}
@@ -362,22 +440,40 @@ export default function RequestExchange() {
                         id="whatsapp"
                         name="whatsapp"
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
+                        className={`w-full ${
+                          language === "ar" ? "pr-10" : "pl-10"
+                        } py-3 border rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
                           placeholder-gray-400 transition-all duration-300 focus:ring-2 focus:ring-yellow-500/50 
                           focus:border-yellow-500 hover:bg-gray-700/70 ${
                             formErrors.whatsapp
                               ? "border-red-500 focus:ring-red-500/50"
                               : "border-gray-600"
                           }`}
-                        placeholder={t("enter_whatsapp")}
                       />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-green-500">💬</span>
+                      <div
+                        className={`absolute inset-y-0 ${
+                          language === "ar" ? "right-3" : "left-3"
+                        } flex items-center `}
+                      >
+                        <span className="text-green-500">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"></path>
+                          </svg>
+                        </span>
                       </div>
                     </div>
                     {formErrors.whatsapp && (
                       <p className="text-red-400 text-sm flex items-center">
-                        <span className="mr-1">⚠️</span> {formErrors.whatsapp}
+                        <span className="mr-1">
+                          <TriangleAlert />
+                        </span>{" "}
+                        {formErrors.whatsapp}
                       </p>
                     )}
                   </div>
@@ -391,17 +487,33 @@ export default function RequestExchange() {
                         type="text"
                         id="guest_identification"
                         name="guest_identification"
-                        className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
+                        className={`w-full ${
+                          language === "ar" ? "pr-10" : "pl-10"
+                        }  py-3 border border-gray-600 rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
                           placeholder-gray-400 transition-all duration-300 focus:ring-2 focus:ring-yellow-500/50 
-                          focus:border-yellow-500 hover:bg-gray-700/70"
+                          focus:border-yellow-500 hover:bg-gray-700/70`}
                         placeholder={t("enter_id")}
                       />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-yellow-500">🆔</span>
+                      <div
+                        className={`absolute inset-y-0 ${
+                          language === "ar" ? "right-3" : "left-3"
+                        } flex items-center `}
+                      >
+                        <span className="text-yellow-500">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M200,112a8,8,0,0,1-8,8H152a8,8,0,0,1,0-16h40A8,8,0,0,1,200,112Zm-8,24H152a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm40-80V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Zm-80.26-34a8,8,0,1,1-15.5,4c-2.63-10.26-13.06-18-24.25-18s-21.61,7.74-24.25,18a8,8,0,1,1-15.5-4,39.84,39.84,0,0,1,17.19-23.34,32,32,0,1,1,45.12,0A39.76,39.76,0,0,1,135.75,166ZM96,136a16,16,0,1,0-16-16A16,16,0,0,0,96,136Z"></path>
+                          </svg>
+                        </span>
                       </div>
                     </div>
                     <p className="text-sm text-gray-400 flex items-center">
-                      <span className="mr-1">ℹ️</span> {t("id_help_text")}
+                      {t("id_help_text")}
                     </p>
                   </div>
                 </div>
@@ -466,8 +578,10 @@ export default function RequestExchange() {
                       id="base_currency"
                       name="base_currency"
                       readOnly
-                      className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 
-                        uppercase cursor-not-allowed"
+                      className={`w-full ${
+                        language === "ar" ? "pr-10" : "pl-10"
+                      } py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 
+                        uppercase cursor-not-allowed`}
                       value={exData?.fromCurrency || ""}
                     />
                   </div>
@@ -481,8 +595,10 @@ export default function RequestExchange() {
                       id="target_currency"
                       name="target_currency"
                       readOnly
-                      className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 
-                        uppercase cursor-not-allowed"
+                      className={`w-full ${
+                        language === "ar" ? "pr-10" : "pl-10"
+                      } py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 
+                        uppercase cursor-not-allowed`}
                       value={exData?.toCurrency || ""}
                     />
                   </div>
@@ -496,7 +612,9 @@ export default function RequestExchange() {
                       id="base_amount"
                       name="base_amount"
                       readOnly
-                      className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 cursor-not-allowed"
+                      className={`w-full ${
+                        language === "ar" ? "pr-10" : "pl-10"
+                      } py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 cursor-not-allowed`}
                       value={exData?.fromAmount || ""}
                     />
                   </div>
@@ -510,7 +628,9 @@ export default function RequestExchange() {
                       id="exchange_rate"
                       name="exchange_rate"
                       readOnly
-                      className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 cursor-not-allowed"
+                      className={`w-full ${
+                        language === "ar" ? "pr-10" : "pl-10"
+                      } py-3 border border-gray-600 rounded-xl bg-gray-600/50 text-gray-300 cursor-not-allowed`}
                       value={exData?.rate.toFixed(6) || ""}
                     />
                   </div>
@@ -524,12 +644,13 @@ export default function RequestExchange() {
                       id="target_amount"
                       name="target_amount"
                       readOnly
-                      className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gradient-to-r from-gray-600/50 to-gray-600/30 
-                        text-yellow-300 cursor-not-allowed font-semibold"
+                      className={`w-full ${
+                        language === "ar" ? "pr-10" : "pl-10"
+                      } py-3 border border-gray-600 rounded-xl bg-gradient-to-r from-gray-600/50 to-gray-600/30 
+                        text-yellow-300 cursor-not-allowed font-semibold`}
                       value={exData?.toAmount || ""}
                     />
                     <p className="text-sm text-gray-400 flex items-center">
-                      <span className="mr-1">🔄</span>{" "}
                       {t("calculated_automatically")}
                     </p>
                   </div>
@@ -560,24 +681,38 @@ export default function RequestExchange() {
                         name="payment_method"
                         value={formData.payment_method}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-600 rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
+                        className={`w-full ${
+                          language === "ar" ? "pr-10" : "pl-10"
+                        } py-3 border border-gray-600 rounded-xl bg-gray-700/50 backdrop-blur-sm text-gray-100 
     transition-all duration-300 focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 
-    hover:bg-gray-700/70 cursor-pointer"
+    hover:bg-gray-700/70 cursor-pointer`}
                       >
                         <option value="">{t("select_payment_method")}</option>
-                        <option value="cash">💵 {t("cash")}</option>
+                        <option value="cash">{t("cash")}</option>
                         <option value="bank_transfer">
-                          🏦 {t("bank_transfer")}
+                          {t("bank_transfer")}
                         </option>
-                        <option value="credit_card">
-                          💳 {t("credit_card")}
-                        </option>
+                        <option value="credit_card">{t("credit_card")}</option>
                         <option value="mobile_wallet">
-                          📱 {t("mobile_wallet")}
+                          {t("mobile_wallet")}
                         </option>
                       </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <span className="text-yellow-500">💳</span>
+                      <div
+                        className={`absolute inset-y-0 ${
+                          language === "ar" ? "right-3" : "left-3"
+                        } flex items-center `}
+                      >
+                        <span className="text-yellow-500">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path>
+                          </svg>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -586,7 +721,7 @@ export default function RequestExchange() {
                 {/* Summary Card */}
                 <div className="bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20 rounded-xl p-6 mt-8">
                   <h3 className="text-lg font-semibold text-blue-400 mb-4 flex items-center">
-                    <span className="mr-2">📋</span> {t("request_summary")}
+                    {t("request_summary")}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div className="space-y-2">
@@ -628,13 +763,16 @@ export default function RequestExchange() {
                 type="button"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center ${
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 flex items-center ${
                   currentStep === 1
                     ? "bg-gray-700 text-gray-500 cursor-not-allowed"
                     : "bg-gray-700 text-white hover:bg-gray-600 hover:shadow-lg transform hover:-translate-y-0.5"
                 }`}
               >
-                <span className="mr-2">←</span> {t("previous")}
+                <span className="mr-2">
+                  {language === "ar" ? <ArrowRight /> : <ArrowLeft />}
+                </span>{" "}
+                {t("previous")}
               </button>
 
               {currentStep < 3 ? (
@@ -642,18 +780,21 @@ export default function RequestExchange() {
                   type="button"
                   onClick={nextStep}
                   className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-900 font-semibold 
-                    rounded-xl hover:from-yellow-600 hover:to-amber-600 transition-all duration-300 transform 
+                    rounded-full hover:from-yellow-600 hover:to-amber-600 transition-all duration-300 transform 
                     hover:-translate-y-0.5 hover:shadow-lg flex items-center"
                 >
-                  {t("next")} <span className="ml-2">→</span>
+                  {t("next")}{" "}
+                  <span className="ml-2">
+                    {language === "ar" ? <ArrowLeft /> : <ArrowRight />}
+                  </span>
                 </button>
               ) : (
                 <button
                   type="submit"
                   onClick={submitHandler}
                   disabled={loading}
-                  className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold 
-                    rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 transform 
+                  className="px-8 py-3 mx-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold 
+                    rounded-full hover:from-green-600 hover:to-emerald-600 transition-all duration-300 transform 
                     hover:-translate-y-0.5 hover:shadow-lg flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (

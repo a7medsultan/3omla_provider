@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { t, setLang } from "../i18n";
+import { setLang } from "../i18n";
 import { useEffect, useState } from "react";
 
 // Define the props for the component
@@ -18,11 +18,17 @@ const InnerHeader: React.FC<HeaderProps> = ({ title }) => {
     return (localStorage.getItem("lang") as Lang) || "ar";
   });
 
-  // This useEffect will run only once when the component mounts
-  // to ensure the i18n library is set to the correct language.
+  // set the language based on the current language
   useEffect(() => {
-    setLang(language);
-  }, [language]); // Depend on language state to update i18n
+    if (language) {
+      setLang(language);
+    } else {
+      // default is ar
+      let currentLang: Lang = (localStorage.getItem("lang") as Lang) || "ar";
+      setLanguage(currentLang);
+      setLang(currentLang);
+    }
+  });
 
   const goToPrevPage = () => {
     // go back to the previous page in history

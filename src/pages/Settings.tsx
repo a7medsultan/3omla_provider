@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
 import { Switch } from "@headlessui/react";
 import axios from "axios";
 import { t, setLang } from "../i18n";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface Currency {
   id: number;
@@ -35,7 +37,7 @@ export default function CurrencyExchangeApp() {
     const fetchCurrencies = async () => {
       try {
         const { data: currencyData } = await axios.get<Currency[]>(
-          "http://localhost:8080/api/v1/listCurrencies"
+          `${API_URL}/listCurrencies`
         );
         setCurrencies(currencyData);
       } catch (error) {
@@ -51,7 +53,7 @@ export default function CurrencyExchangeApp() {
     const fetchProviderCurrencies = async () => {
       try {
         const { data: providerData } = await axios.get<Currency[]>(
-          `http://localhost:8080/api/v1/activeCurrencies/${provider_id}`
+          `${API_URL}/activeCurrencies/${provider_id}`
         );
         setProviderCurrencies(providerData);
       } catch (error) {
@@ -77,7 +79,7 @@ export default function CurrencyExchangeApp() {
     const provider_id = JSON.parse(userData ?? "{}").provider_id;
     try {
       await axios.post(
-        `http://localhost:8080/api/v1/activateCurrency/${provider_id}`,
+        `${API_URL}/activateCurrency/${provider_id}`,
         {
           currency_id: providerCurrency.id,
           is_active: isActive,

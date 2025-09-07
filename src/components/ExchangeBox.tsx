@@ -9,7 +9,6 @@ import {
   Download,
   Share,
   Trash2,
-  RefreshCw,
   AlertCircle,
   CheckCheck,
 } from "lucide-react";
@@ -18,6 +17,8 @@ import { t, setLang } from "../i18n";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
 
 type Lang = "ar" | "en";
 
@@ -203,17 +204,18 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
     setLoading(true);
     // Example API call to update status
     axios
-      .post(`http://localhost:8080/api/v1/updateRequestStatus`, {
+      .post(`${API_URL}/updateRequestStatus`, {
         reference_number: refNo,
         status: newStatus,
       })
-      .then((response) => {
+      .then(() => {
         // Optionally refresh data or give user feedback
         fetchExchangeRequests(true); // Force refresh
         // update the state of exStatus if needed
         setExStatus(newStatus);
       })
       .catch((error) => {
+        console.error("Error updating status:", error);
       })
       .finally(() => {
         setLoading(false);
@@ -227,13 +229,14 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
       const cached = localStorage.getItem("exchangeRequests");
       if (cached) {
         setExchangeRequests(JSON.parse(cached));
+        console.log(exchangeRequests);
         setLoading(false); // ✅ stop loader if cache is used
         return;
       }
     }
 
     axios
-      .get(`http://localhost:8080/api/v1/recentRequests/1/0`)
+      .get(`${API_URL}/recentRequests/1/0`)
       .then((response) => {
         setExchangeRequests(response.data);
         localStorage.setItem("exchangeRequests", JSON.stringify(response.data));
@@ -265,9 +268,11 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
   const formatDate = (dateStr: string) => {
     const [datePart, timePart] = dateStr.split(" ");
     const [year, month, day] = datePart.split("-");
+    const [hours, minutes, seconds] = timePart.split(":");
 
     const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-
+    const time = new Date();
+    time.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
     if (isNaN(date.getTime())) {
       return "Invalid date";
     }
@@ -460,7 +465,6 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
       </div>
       {loading ? <Loader /> : null}
     </div>
-    
   );
 };
 

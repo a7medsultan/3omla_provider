@@ -6,6 +6,8 @@ import Navigation from "../components/Navigation";
 import Header from "../components/Header";
 import { t, setLang } from "../i18n";
 import Loader from "../components/Loader";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
 type Lang = "ar" | "en";
 
 // Mobile App Demo
@@ -46,7 +48,7 @@ const adminHistory = () => {
     }
 
     axios
-      .get(`http://localhost:8080/api/v1/recentRequests/1/0`)
+      .get(`${API_URL}/recentRequests/1/0`)
       .then((response) => {
         setExchangeRequests(response.data);
         localStorage.setItem("exchangeRequests", JSON.stringify(response.data));
@@ -73,6 +75,7 @@ const adminHistory = () => {
 
   const handleCurrencyPress = (refNo: string) => {
     // In a real Capacitor app, you might navigate to a detail page
+    console.log("Currency pressed:", refNo);
   };
 
   return (

@@ -135,5 +135,6 @@
   "amount":"المبلغ",
   "pending_approval": "في الانتظار",
   "previous": "السابق",
-  "next": "التالي"
+  "next": "التالي",
+  "fill_details_to_process_exchange": "املاء البيانات لإكمال طلب التحويل"
 }

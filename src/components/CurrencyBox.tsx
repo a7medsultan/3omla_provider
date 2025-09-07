@@ -1,5 +1,4 @@
-import { Repeat } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 // Define a type for the currency prop
 interface Currency {

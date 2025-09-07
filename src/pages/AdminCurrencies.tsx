@@ -8,6 +8,8 @@ import CurrencyRow from "../components/CurrencyRow";
 import CustomModal from "../components/CustomModal";
 import Loader from "../components/Loader";
 import { t, setLang } from "../i18n";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
 type Lang = "ar" | "en";
 interface Currency {
   id: number;
@@ -75,7 +77,7 @@ const AdminCurrencies: React.FC = () => {
 
       // ✅ If no cache or forceRefresh → fetch from API
       const { data: currencyData } = await axios.get<Currency[]>(
-        `http://localhost:8080/api/v1/activeCurrencies/${provider_id}`
+        `${API_URL}/activeCurrencies/${provider_id}`
       );
 
       const baseCurr = currencyData.find((c) => c.base_currency) || null;
@@ -155,7 +157,7 @@ const AdminCurrencies: React.FC = () => {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/v1/setRates/${provider_id}`,
+        `${API_URL}/setRates/${provider_id}`,
         dataToSend
       );
       setModalMessage(t("rates_submitted_successfully"));

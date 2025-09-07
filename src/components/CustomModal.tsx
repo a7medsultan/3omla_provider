@@ -1,5 +1,5 @@
 import React from "react";
-import { t, setLang } from "../i18n";
+import { t } from "../i18n";
 // Custom Modal Component (replaces alert())
 interface CustomModalProps {
   message: string;

@@ -135,6 +135,7 @@
   "amount":"Amount",
   "pending_approval": "Pending Approval",
   "previous": "Previous",
-  "next": "Next"
+  "next": "Next",
+  "fill_details_to_process_exchange": "Fill in your details to process your currency exchange request"
 
 }

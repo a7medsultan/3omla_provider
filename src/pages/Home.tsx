@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowDownUp,
-  Compass,
-  ArrowRightLeft,
-  HandCoins,
-  BarChart2,
   Loader,
 } from "lucide-react";
 import Navigation from "../components/Navigation";
@@ -14,6 +10,8 @@ import { t, setLang } from "../i18n";
 import Header from "../components/Header";
 import ExchangeBox from "../components/ExchangeBox";
 import { useSwipeable } from "react-swipeable";
+// imporrt the api url from env
+const API_URL = import.meta.env.VITE_API_URL;
 type Lang = "ar" | "en";
 // --- CurrencyAmount component ---
 interface Currency {
@@ -85,36 +83,6 @@ const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
       <div className="text-sm text-gray-400 mt-2">
         {t("decimal_places")}: {selectedCurrency.decimal_places}
       </div>
-    </div>
-  );
-};
-
-// --- CurrencyPair component ---
-interface CurrencyPairProps {
-  pairFrom: string;
-  pairTo: string;
-  pairRate: string;
-  pairChange: string;
-}
-
-const CurrencyPair: React.FC<CurrencyPairProps> = ({
-  pairFrom,
-  pairTo,
-  pairRate,
-  pairChange,
-}) => {
-  const changeColor = pairChange.startsWith("+")
-    ? "text-green-400"
-    : "text-red-400";
-  return (
-    <div className="bg-gray-700 p-4 rounded-xl shadow-md border border-gray-600">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-lg font-bold">
-          {pairFrom}/{pairTo}
-        </span>
-        <span className="text-lg font-semibold">{pairRate}</span>
-      </div>
-      <span className={`text-sm ${changeColor}`}>{pairChange}</span>
     </div>
   );
 };
@@ -286,7 +254,7 @@ export default function CurrencyExchangeApp() {
     }
 
     axios
-      .get(`http://localhost:8080/api/v1/recentRequests/1/0`)
+      .get(`${API_URL}/recentRequests/1/0`)
       .then((response) => {
         setExchangeRequests(response.data);
         localStorage.setItem("exchangeRequests", JSON.stringify(response.data));
@@ -301,6 +269,7 @@ export default function CurrencyExchangeApp() {
 
   const handleCurrencyPress = (refNo: string) => {
     // In a real Capacitor app, you might navigate to a detail page
+    console.log("Currency pressed:", refNo);
   };
 
   return (
@@ -406,7 +375,7 @@ export default function CurrencyExchangeApp() {
           {activeTab === "latest" && (
             <div
               id="latest-requests"
-              className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6"
+              className="rounded-2xl w-full shadow-lg space-y-6"
             >
               {
                 // fetch latest 5 exchange requests
@@ -443,14 +412,16 @@ export default function CurrencyExchangeApp() {
           {activeTab === "biggest_sell" && (
             <div
               id="biggest-sell-requests"
-              className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6"
+              className="rounded-2xl w-full shadow-lg space-y-6"
             >
               {
                 // fetch latest 5 exchange requests
                 exchangeRequests
                   .filter(
                     (req) =>
-                      (req.status === "pending" || req.status === "processing") && req.base_currency === baseCurrency?.code
+                      (req.status === "pending" ||
+                        req.status === "processing") &&
+                      req.base_currency === baseCurrency?.code
                   )
                   .slice(0, 5)
                   .sort((a, b) => b.base_amount - a.base_amount)
@@ -481,14 +452,16 @@ export default function CurrencyExchangeApp() {
           {activeTab === "biggest_buy" && (
             <div
               id="biggest-buy-requests"
-              className="bg-gray-800 p-6 rounded-2xl w-full shadow-lg space-y-6"
+              className="rounded-2xl w-full shadow-lg space-y-6"
             >
               {
                 // fetch latest 5 exchange requests
                 exchangeRequests
                   .filter(
                     (req) =>
-                      (req.status === "pending" || req.status === "processing") && req.target_currency === baseCurrency?.code
+                      (req.status === "pending" ||
+                        req.status === "processing") &&
+                      req.target_currency === baseCurrency?.code
                   )
                   .slice(0, 5)
                   .sort((a, b) => b.target_amount - a.target_amount)
