@@ -73,7 +73,7 @@ export default function CurrencyExchangeApp() {
         });
 
       if (!data) {
-        setModalMessage("Incorrect credentials. Please try again.");
+        setModalMessage(t("error_verifying_user"));
         setShowModal(true);
         return;
       }
@@ -88,7 +88,7 @@ export default function CurrencyExchangeApp() {
       // show otp in the otpHint div
       const otpHint = document.getElementById("otpHint");
       if (otpHint) {
-        otpHint.textContent = `pst, your OTP is: ${newOtp} `;
+        otpHint.textContent = `pst, OTP: ${newOtp} `;
       }
       setOtpSent(true);
     }
@@ -112,14 +112,14 @@ export default function CurrencyExchangeApp() {
     const enteredOtp = otp.join("");
     // Handle verification logic here
     if (enteredOtp === generatedOtp) {
-      setModalMessage("OTP verified successfully!");
+      setModalMessage(t("otp_verified"));
       setTimeout(() => {
         setShowModal(false); // Close modal
         navigate("/"); // Navigate to the home page
       }, 2000);
     } else {
       console.error("Invalid OTP. Please try again.");
-      setModalMessage("Invalid OTP. Please try again.");
+      setModalMessage(t("invalid_otp"));
       setShowModal(true);
 
       // Optionally reset OTP input fields
@@ -136,7 +136,7 @@ export default function CurrencyExchangeApp() {
     // show otp in the otpHint div
     const otpHint = document.getElementById("otpHint");
     if (otpHint) {
-      otpHint.textContent = `pst, your new OTP is: ${newOtp} `;
+      otpHint.textContent = `pst, OTP: ${newOtp} `;
     }
   };
 
@@ -149,7 +149,7 @@ export default function CurrencyExchangeApp() {
       >
         <Globe size={18} />
         <span className="text-sm font-medium">
-          {language === "ar" ? "العربية" : "English"}
+          {language === "ar" ? t("arabic") : t("english")}
         </span>
       </button>
 
