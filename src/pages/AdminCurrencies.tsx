@@ -199,7 +199,7 @@ const AdminCurrencies: React.FC = () => {
               <CurrencyRow
                 key={currency.id}
                 currency={currency}
-                baseCurrency={baseCurrency || undefined}
+                baseCurrency={baseCurrency?.code || null}
                 todayRate={currency.sell_rate || null}
                 rate={
                   rates.find((rate) => rate.targetCurrency === currency.code) ||

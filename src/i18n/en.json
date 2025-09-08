@@ -136,6 +136,12 @@
   "pending_approval": "Pending Approval",
   "previous": "Previous",
   "next": "Next",
-  "fill_details_to_process_exchange": "Fill in your details to process your currency exchange request"
+  "fill_details_to_process_exchange": "Fill in your details to process your currency exchange request",
+  "prices": "Prices",
+  "transactions": "Transactions",
+  "exchange_requests": "Exchange Requests",
+  "latest": "Latest",
+  "biggest_buy": "Biggest Buy",
+  "biggest_sell": "Biggest Sell"
 
 }

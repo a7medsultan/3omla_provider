@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ArrowDownUp,
-  Loader,
-} from "lucide-react";
+import { ArrowDownUp, Loader } from "lucide-react";
 import Navigation from "../components/Navigation";
 import axios from "axios";
 import { t, setLang } from "../i18n";
@@ -337,37 +334,40 @@ export default function CurrencyExchangeApp() {
         )}
 
         <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-4 text-yellow-500">
+            {t("exchange_requests")}
+          </h2>
           {/* Segmented buttons - full width */}
           <div className="mb-6 flex rounded-full overflow-hidden border border-gray-700 w-full">
             <button
               onClick={() => setActiveTab("latest")}
-              className={`flex-1 py-2 px-4 transition-colors duration-200 text-sm ${
+              className={`flex-1 py-2 px-4 transition-colors duration-200 text-xs ${
                 activeTab === "latest"
                   ? "bg-yellow-500 text-gray-900"
                   : "bg-gray-800 text-gray-100 hover:bg-gray-700"
               }`}
             >
-              {t("latest_requests")}
+              {t("latest")}
             </button>
             <button
               onClick={() => setActiveTab("biggest_buy")}
-              className={`flex-1 py-2 px-4 transition-colors duration-200 text-sm ${
+              className={`flex-1 py-2 px-4 transition-colors duration-200 text-xs ${
                 activeTab === "biggest_buy"
                   ? "bg-yellow-500 text-gray-900"
                   : "bg-gray-800 text-gray-100 hover:bg-gray-700"
               }`}
             >
-              {t("biggest_buy_requests")}
+              {t("biggest_buy")}
             </button>
             <button
               onClick={() => setActiveTab("biggest_sell")}
-              className={`flex-1 py-2 px-4 transition-colors duration-200 text-sm ${
+              className={`flex-1 py-2 px-4 transition-colors duration-200 text-xs ${
                 activeTab === "biggest_sell"
                   ? "bg-yellow-500 text-gray-900"
                   : "bg-gray-800 text-gray-100 hover:bg-gray-700"
               }`}
             >
-              {t("biggest_sell_requests")}
+              {t("biggest_sell")}
             </button>
           </div>
 

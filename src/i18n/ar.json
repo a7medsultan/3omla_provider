@@ -136,5 +136,11 @@
   "pending_approval": "في الانتظار",
   "previous": "السابق",
   "next": "التالي",
-  "fill_details_to_process_exchange": "املاء البيانات لإكمال طلب التحويل"
+  "fill_details_to_process_exchange": "املاء البيانات لإكمال طلب التحويل",
+  "prices": "الأسعار",
+  "transactions": "المعاملات",
+  "exchange_requests": "طلبات التحويل",
+  "latest": "الأحدث",
+  "biggest_buy": "أكبر شراء",
+  "biggest_sell": "أكبر بيع"
 }

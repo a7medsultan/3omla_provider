@@ -1,4 +1,4 @@
-import { Repeat, User, ArrowRightLeft, Coins, BarChart2 } from "lucide-react";
+import { Repeat, ArrowRightLeft, Coins, BarChart2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { t } from '../i18n';
 
@@ -30,7 +30,7 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
           <Coins size={20} />
         </Link>
         <Link to="/adminCurrencies">
-          <span className="text-xs mt-1">{t("exchange_rates")}</span>
+          <span className="text-xs mt-1">{t("prices")}</span>
         </Link>
       </button>
       <button
@@ -42,7 +42,7 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
           <Repeat size={20} />
         </Link>
         <Link to="/adminHistory">
-          <span className="text-xs mt-1">{t("history")}</span>
+          <span className="text-xs mt-1">{t("transactions")}</span>
         </Link>
       </button>
       <button

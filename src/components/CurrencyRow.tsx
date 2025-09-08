@@ -26,7 +26,7 @@ interface Rate {
 
 interface CurrenciesProps {
   currency: Currency;
-  baseCurrency?: Currency;
+  baseCurrency: string  | null;
   todayRate: number | null;
   rate: Rate | null;
   onRateChange: (
@@ -36,6 +36,7 @@ interface CurrenciesProps {
 
 const CurrencyRow: React.FC<CurrenciesProps> = ({
   currency,
+  baseCurrency,
   rate,
   onRateChange,
 }) => {
@@ -45,14 +46,14 @@ const CurrencyRow: React.FC<CurrenciesProps> = ({
         {currency.flag_emoji}
       </div>
       <div className="flex-1 mx-2">
-        <div className="flex justify-between">
-          <span className="font-medium">{currency.name}</span>
+        <div className="flex justify-between text-xs">
+          <span className="font-medium  text-sm">{currency.name}</span>
           <span className="font-bold">
             {t("sell")}{" "}
             <input
               type="number"
               value={rate?.sell_rate ?? ""}
-              className="w-16 bg-gray-700 border border-gray-600 rounded-md p-1 text-sm"
+              className="w-16 bg-gray-700 border border-gray-600 rounded-md p-1"
               onChange={(e) =>
                 onRateChange({
                   targetCurrency: currency.code,
@@ -60,17 +61,17 @@ const CurrencyRow: React.FC<CurrenciesProps> = ({
                 })
               }
             />{" "}
-            SDG
+            {baseCurrency}
           </span>
         </div>
-        <div className="flex justify-between mt-1">
+        <div className="flex justify-between mt-1  text-xs">
           <span className="text-sm text-gray-400">1 {currency.code}</span>
           <span className="font-bold">
             {t("buy")}{" "}
             <input
               type="number"
               value={rate?.buy_rate ?? ""}
-              className="w-16 bg-gray-700 border border-gray-600 rounded-md p-1 text-sm"
+              className="w-16 bg-gray-700 border border-gray-600 rounded-md p-1"
               onChange={(e) =>
                 onRateChange({
                   targetCurrency: currency.code,
@@ -78,7 +79,7 @@ const CurrencyRow: React.FC<CurrenciesProps> = ({
                 })
               }
             />{" "}
-            SDG
+            {baseCurrency}
           </span>
         </div>
       </div>
