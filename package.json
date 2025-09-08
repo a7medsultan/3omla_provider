@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "tailwind:init": "tailwindcss init -p"
+    "tailwind:init": "tailwindcss init -p",
+    "deploy": "npm run build && npx cap copy && npx cap sync"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",

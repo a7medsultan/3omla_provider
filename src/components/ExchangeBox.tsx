@@ -266,16 +266,10 @@ const ExchangeBox: React.FC<CurrenciesProps> = ({
 
   // Format date from datetime string ie 2025-09-03 01:35:23 for mobile
   const formatDate = (dateStr: string) => {
-    const [datePart, timePart] = dateStr.split(" ");
+    const [datePart] = dateStr.split(" ");
     const [year, month, day] = datePart.split("-");
-    const [hours, minutes, seconds] = timePart.split(":");
 
     const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    const time = new Date();
-    time.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
-    if (isNaN(date.getTime())) {
-      return "Invalid date";
-    }
 
     return date.toLocaleDateString("en-US", {
       month: "short",
