@@ -100,7 +100,7 @@
   "OK": "OK",
   "exchange": "Exchange",
   "error_submitting_rates": "There was an error submitting the rates. Please try again.",
-  "rates_submitted_successfully": "Rates submitted successfully.",
+  "rates_submitted_successfully": "Rates updated successfully.",
   "recent": "Recent",
   "pending": "Pending",
   "rejected": "Rejected",

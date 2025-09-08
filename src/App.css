@@ -15,6 +15,9 @@ div {
   font-style: normal;
   font-variation-settings: "HEXP" 0;
 }
+body {
+  @apply bg-gray-900;
+}
 .small-text {
   font-size: 0.7rem;
 }

@@ -143,6 +143,7 @@ const AdminCurrencies: React.FC = () => {
   // Submit rates
   // -----------------------------
   const submitRates = async () => {
+    setLoading(true);
     const filteredRates = rates.filter((rate) => rate.sell_rate > 0);
 
     if (!filteredRates.length || !baseCurrency) return;
@@ -163,6 +164,8 @@ const AdminCurrencies: React.FC = () => {
       console.error("Error submitting rates:", error);
       setModalMessage(t("error_submitting_rates"));
       setShowModal(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -199,7 +202,11 @@ const AdminCurrencies: React.FC = () => {
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       <Header title={t("today_exchange_rates")} />
 
-      <main {...handlers} onScroll={handleScroll} className="flex-1 overflow-auto p-4">
+      <main
+        {...handlers}
+        onScroll={handleScroll}
+        className="flex-1 overflow-auto p-4"
+      >
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold text-yellow-500"></h3>

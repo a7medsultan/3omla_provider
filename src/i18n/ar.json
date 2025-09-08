@@ -100,7 +100,7 @@
   "OK": "موافق",
   "exchange": "التحويلات",
   "error_submitting_rates": "حدث خطأ أثناء إرسال الأسعار. يرجى المحاولة مرة أخرى.",
-  "rates_submitted_successfully": "تم إرسال الأسعار بنجاح.",
+  "rates_submitted_successfully": "تم تحديث الأسعار بنجاح.",
   "recent": "الأحدث",
   "pending": "قيد الانتظار",
   "rejected": "مرفوض",
