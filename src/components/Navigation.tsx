@@ -47,18 +47,6 @@ const Navigation: React.FC<NavProps> = ({ pageName }) => {
       </button>
       <button
         className={`p-2 rounded-lg flex flex-col items-center ${
-          pageName === "adminProfile" ? "text-yellow-500" : "text-gray-500"
-        }`}
-      >
-        <Link to="/adminProfile">
-          <User size={20} />
-        </Link>
-        <Link to="/adminProfile">
-          <span className="text-xs mt-1">{t("profile")}</span>
-        </Link>
-      </button>
-      <button
-        className={`p-2 rounded-lg flex flex-col items-center ${
           pageName === "reports" ? "text-yellow-500" : "text-gray-500"
         }`}
       >
