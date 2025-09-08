@@ -142,6 +142,11 @@
   "exchange_requests": "Exchange Requests",
   "latest": "Latest",
   "biggest_buy": "Biggest Buy",
-  "biggest_sell": "Biggest Sell"
+  "biggest_sell": "Biggest Sell",
+  "example": "Example",
+  "activate_currencies": "Activate Currencies",
+  "select_base_currency": "Select Base Currency",
+  "base_currency_description": "The base currency is the currency to which all other currencies will be converted. For example, if the base currency is the US Dollar (USD), all exchange rates will be displayed against the US Dollar.",
+  "base": "Base"
 
 }

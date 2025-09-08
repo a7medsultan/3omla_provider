@@ -175,7 +175,7 @@ const AdminCurrencies: React.FC = () => {
 
   const handlers = useSwipeable({
     onSwipedDown: () => {
-      console.log("Swipe detected, isAtTop:", isAtTop);
+      
 
       if (isAtTop) {
         console.log("Swiped down → refreshing currencies");
@@ -190,7 +190,7 @@ const AdminCurrencies: React.FC = () => {
     const target = e.target as HTMLElement;
     const scrollTop = target.scrollTop || 0;
     const newIsAtTop = scrollTop <= 10;
-    console.log("Main scroll:", scrollTop, "isAtTop:", newIsAtTop);
+    
     setIsAtTop(newIsAtTop);
   };
 

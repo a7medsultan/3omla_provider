@@ -3,10 +3,12 @@ import logo from "../assets/beexchange-transparent.png";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../components/CustomModal";
 import axios from "axios";
+import { Globe } from "lucide-react"; // Import globe icon for language toggle
 // imporrt the api url from env
 const API_URL = import.meta.env.VITE_API_URL;
 import { t, setLang } from "../i18n";
 type Lang = "ar" | "en";
+
 export default function CurrencyExchangeApp() {
   const [email, setEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -19,6 +21,15 @@ export default function CurrencyExchangeApp() {
   const verifyProviderUrl = `${API_URL}/providerVerification/1`; // Replace with your actual API endpoint
 
   const navigate = useNavigate();
+
+  // Language toggle function
+  const toggleLanguage = () => {
+    const newLang: Lang = language === "ar" ? "en" : "ar";
+    setLanguage(newLang);
+    setLang(newLang);
+    localStorage.setItem("lang", newLang);
+  };
+
   // set the language based on the current language
   useEffect(() => {
     if (language) {
@@ -37,6 +48,7 @@ export default function CurrencyExchangeApp() {
       navigate("/");
     }
   }, []);
+
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
@@ -130,6 +142,17 @@ export default function CurrencyExchangeApp() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-gray-100">
+      {/* Language Toggle Button - Top Right */}
+      <button
+        onClick={toggleLanguage}
+        className="absolute top-6 right-6 flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-yellow-500 px-4 py-2 rounded-full transition-colors border border-gray-700"
+      >
+        <Globe size={18} />
+        <span className="text-sm font-medium">
+          {language === "ar" ? "العربية" : "English"}
+        </span>
+      </button>
+
       <div className="flex flex-col items-center">
         {/* Logo */}
         <img
@@ -148,16 +171,13 @@ export default function CurrencyExchangeApp() {
 
           {!otpSent ? (
             <>
-              <label className="block text-sm mb-2 text-gray-300">
-                {t("email")}
-              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="you@example.com"
-                className="w-full p-4 rounded-full border border-gray-700 bg-gray-700 text-gray-100 mb-6 focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                placeholder={`${t("email")} ${t("example")}: you@example.com`}
+                className="w-full p-4 rounded-full border border-gray-700 bg-gray-700 text-gray-100 text-sm mb-6 focus:outline-none focus:ring-1 focus:ring-yellow-500"
               />
               <button
                 type="submit"

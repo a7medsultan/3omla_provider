@@ -127,7 +127,7 @@ export default function CurrencyExchangeApp() {
         <div className="mb-6 flex rounded-full overflow-hidden border border-gray-700 w-full max-w-md">
           <button
             onClick={() => setActiveTab("currencies")}
-            className={`flex-1 py-2 px-4 transition-colors duration-200 ${
+            className={`flex-1 py-2 px-4 transition-colors duration-200 text-xs ${
               activeTab === "currencies"
                 ? "bg-yellow-500 text-gray-900"
                 : "bg-gray-800 text-gray-100 hover:bg-gray-700"
@@ -137,7 +137,7 @@ export default function CurrencyExchangeApp() {
           </button>
           <button
             onClick={() => setActiveTab("admin")}
-            className={`flex-1 py-2 px-4 transition-colors duration-200 ${
+            className={`flex-1 py-2 px-4 transition-colors duration-200 text-xs ${
               activeTab === "admin"
                 ? "bg-yellow-500 text-gray-900"
                 : "bg-gray-800 text-gray-100 hover:bg-gray-700"
@@ -206,7 +206,7 @@ export default function CurrencyExchangeApp() {
         {activeTab === "admin" && (
           <div className="bg-gray-800 p-6 rounded-2xl w-full max-w-md shadow-lg space-y-6">
             <div className="flex items-center justify-between">
-              <span className="text-gray-200">{t("english")}</span>
+              <span className="text-gray-200 text-sm">{t("english")}</span>
               <Switch
                 checked={language === "en"} // ✅ boolean instead of string
                 onChange={switchLanguage}
@@ -228,7 +228,7 @@ export default function CurrencyExchangeApp() {
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-gray-200">{t("dark_mode")}</span>
+              <span className="text-gray-200 text-sm">{t("dark_mode")}</span>
               <Switch
                 checked={darkMode}
                 onChange={setDarkMode}
@@ -245,7 +245,7 @@ export default function CurrencyExchangeApp() {
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-gray-200">{t("notifications")}</span>
+              <span className="text-gray-200 text-sm">{t("notifications")}</span>
               <Switch
                 checked={notifications}
                 onChange={setNotifications}
