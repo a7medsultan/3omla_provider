@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowDownUp, Loader } from "lucide-react";
+import { ArrowDownUp } from "lucide-react";
 import Navigation from "../components/Navigation";
 import axios from "axios";
 import { t, setLang } from "../i18n";
 import Header from "../components/Header";
 import ExchangeBox from "../components/ExchangeBox";
 import { useSwipeable } from "react-swipeable";
+import Loader from "../components/Loader";
 // imporrt the api url from env
 const API_URL = import.meta.env.VITE_API_URL;
 type Lang = "ar" | "en";
@@ -96,6 +97,7 @@ export default function CurrencyExchangeApp() {
   const [language, setLanguage] = useState<Lang>();
   const [exchangeRequests, setExchangeRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     const userData = localStorage.getItem("userData");
@@ -118,15 +120,31 @@ export default function CurrencyExchangeApp() {
   // -----------------------------
   // Swipe handlers (refresh)
   // -----------------------------
+
   const handlers = useSwipeable({
     onSwipedDown: () => {
-      console.log("Swiped down → refreshing currencies");
-      setLoading(true);
-      fetchExchangeRequests(true); // ✅ force refresh from API
+      console.log("Swipe detected, isAtTop:", isAtTop);
+
+      if (isAtTop) {
+        console.log("Swiped down → refreshing currencies");
+        setLoading(true);
+        fetchExchangeRequests(true);
+      }
     },
     delta: 50,
   });
 
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    const scrollTop = target.scrollTop || 0;
+    const newIsAtTop = scrollTop <= 10;
+    console.log("Main scroll:", scrollTop, "isAtTop:", newIsAtTop);
+    setIsAtTop(newIsAtTop);
+  };
+
+  //------------------------------
+  // end swipe handlers
+  //------------------------------
   useEffect(() => {
     // Set default currencies after data is loaded
     if (
@@ -273,7 +291,11 @@ export default function CurrencyExchangeApp() {
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100 font-sans">
       <Header title="BeEx" />
 
-      <main {...handlers} className="flex-1 overflow-auto p-4">
+      <main
+        {...handlers}
+        onScroll={handleScroll}
+        className="flex-1 overflow-auto p-4"
+      >
         {activeCurrencies.length === 0 || !baseCurrency ? (
           <div className="bg-red-500 text-white p-4 rounded-lg mb-4">
             <p className="text-center">{t("please_set_active_currencies")}</p>

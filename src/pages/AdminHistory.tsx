@@ -15,7 +15,7 @@ const adminHistory = () => {
   const [language, setLanguage] = useState<Lang>();
   const [exchangeRequests, setExchangeRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  
+  const [isAtTop, setIsAtTop] = useState(true);
   // set the language based on the current language
   useEffect(() => {
     if (language) {
@@ -64,14 +64,31 @@ const adminHistory = () => {
   // -----------------------------
   // Swipe handlers (refresh)
   // -----------------------------
+
   const handlers = useSwipeable({
     onSwipedDown: () => {
-      console.log("Swiped down → refreshing currencies");
-      setLoading(true);
-      fetchExchangeRequests(true); // ✅ force refresh from API
+      console.log("Swipe detected, isAtTop:", isAtTop);
+
+      if (isAtTop) {
+        console.log("Swiped down → refreshing exchange requests");
+        setLoading(true);
+        fetchExchangeRequests(true);
+      }
     },
     delta: 50,
   });
+
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    const scrollTop = target.scrollTop || 0;
+    const newIsAtTop = scrollTop <= 10;
+    console.log("Main scroll:", scrollTop, "isAtTop:", newIsAtTop);
+    setIsAtTop(newIsAtTop);
+  };
+
+  //------------------------------
+  // end swipe handlers
+  //------------------------------
 
   const handleCurrencyPress = (refNo: string) => {
     // In a real Capacitor app, you might navigate to a detail page
@@ -82,7 +99,11 @@ const adminHistory = () => {
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       {/* Header */}
       <Header title="BeEx" />
-      <main {...handlers} className="flex-1 overflow-auto p-4">
+      <main
+        {...handlers}
+        onScroll={handleScroll}
+        className="flex-1 overflow-auto p-4"
+      >
         {/* Tab Navigation */}
         <div className="flex py-3 justify-center">
           <div className="flex rounded-full overflow-hidden border border-gray-700 w-full max-w-md">

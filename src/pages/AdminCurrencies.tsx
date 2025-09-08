@@ -41,7 +41,7 @@ const AdminCurrencies: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [loading, setLoading] = React.useState(false);
-
+  const [isAtTop, setIsAtTop] = useState(true);
   const today = new Date().toISOString().slice(0, 10);
   const userData = localStorage.getItem("userData");
   const provider_id = JSON.parse(userData ?? "{}").provider_id;
@@ -156,10 +156,7 @@ const AdminCurrencies: React.FC = () => {
     }));
 
     try {
-      await axios.post(
-        `${API_URL}/setRates/${provider_id}`,
-        dataToSend
-      );
+      await axios.post(`${API_URL}/setRates/${provider_id}`, dataToSend);
       setModalMessage(t("rates_submitted_successfully"));
       setShowModal(true);
     } catch (error) {
@@ -172,20 +169,37 @@ const AdminCurrencies: React.FC = () => {
   // -----------------------------
   // Swipe handlers (refresh)
   // -----------------------------
+
   const handlers = useSwipeable({
     onSwipedDown: () => {
-      console.log("Swiped down → refreshing currencies");
-      setLoading(true);
-      fetchCurrenciesAndRates(true); // ✅ force refresh from API
+      console.log("Swipe detected, isAtTop:", isAtTop);
+
+      if (isAtTop) {
+        console.log("Swiped down → refreshing currencies");
+        setLoading(true);
+        fetchCurrenciesAndRates(true);
+      }
     },
     delta: 50,
   });
+
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    const scrollTop = target.scrollTop || 0;
+    const newIsAtTop = scrollTop <= 10;
+    console.log("Main scroll:", scrollTop, "isAtTop:", newIsAtTop);
+    setIsAtTop(newIsAtTop);
+  };
+
+  //------------------------------
+  // end swipe handlers
+  //------------------------------
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       <Header title={t("today_exchange_rates")} />
 
-      <main {...handlers} className="flex-1 overflow-auto p-4">
+      <main {...handlers} onScroll={handleScroll} className="flex-1 overflow-auto p-4">
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold text-yellow-500"></h3>
